@@ -1,5 +1,11 @@
+// ==========================================================================
+// CONTROL DEL FLUX D'ENTRADA (SPLASH & ONBOARDING) – ADARRÓ 360
+// ==========================================================================
+// Aquest script gestiona el cicle de vida inicial de l'aplicació: 
+// des de la precàrrega visual fins a la gestió de permisos de hardware.
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Referències als elements del DOM
+    // Referències als elements del DOM mitjançant IDs únics
     const splash = document.getElementById("splash");
     const onboarding = document.getElementById("onboarding");
     const enterBtn = document.getElementById("enterBtn");
@@ -7,16 +13,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const skipOnboardingBtn = document.getElementById("skipOnboardingBtn");
     const splashBar = document.getElementById("splashProgressBar");
 
-    /* ------------------------------
-       1. ANIMACIÓ DEL SPLASH
-    ------------------------------ */
+    /* -----------------------------------------------------------
+       1. ANIMACIÓ DEL SPLASH (PANTALLA DE CÀRREGA)
+    ----------------------------------------------------------- */
+    // Simulem una barra de progrés per donar feedback a l'usuari 
+    // mentre el Service Worker i els assets s'inicialitzen en segon pla.
     let progress = 0;
     const interval = setInterval(() => {
-        progress = Math.min(100, progress + 10); // Puja de 10 en 10
+        progress = Math.min(100, progress + 10); // Increment gradual del 10%
         if (splashBar) splashBar.style.width = progress + "%";
 
         if (progress >= 100) {
             clearInterval(interval);
+            // Un cop carregat, habilitem la interacció
             if (enterBtn) {
                 enterBtn.disabled = false;
                 enterBtn.textContent = "ENTRAR";
@@ -24,27 +33,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, 200);
 
-    /* ------------------------------
-       2. BOTÓ ENTRAR (Des del Splash)
-    ------------------------------ */
+    /* -----------------------------------------------------------
+       2. GESTIÓ DE L'ESTAT D'USUARI (LocalStorage)
+    ----------------------------------------------------------- */
     enterBtn?.addEventListener("click", () => {
-        // Amaguem el splash (treiem la classe active o el fem desaparèixer)
+        // Ocultem la pantalla de càrrega
         if (splash) {
             splash.classList.remove('active');
             splash.style.display = 'none';
         }
 
-        // Mirem si l'usuari ja ha vist l'onboarding abans
+        // PERSISTÈNCIA DE DADES: 
+        // Verifiquem si l'usuari ja ha passat per l'onboarding anteriorment
         const seenOnboarding = localStorage.getItem("adarro_seen_onboarding");
 
         if (!seenOnboarding) {
-            // Si no l'ha vist, mostrem la pantalla d'onboarding
+            // PRIMER ACCÉS: Mostrem la guia d'aprenentatge i petició de permisos
             if (onboarding) {
-                onboarding.hidden = false;          // <- CLAU
+                onboarding.hidden = false;
                 onboarding.classList.add('active');
             }
         } else {
-            // Si ja l'ha vist, anem directes a la Home usant la teva funció de app.js
+            // ACCÉS RECURRENT: Saltem directament a la interfície principal
             if (typeof window.navigateTo === "function") {
                 window.navigateTo('home');
             } else {
@@ -53,50 +63,56 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* ------------------------------
-       3. BOTONS DE L'ONBOARDING
-    ------------------------------ */
+    /* -----------------------------------------------------------
+       3. GESTIÓ PROACTIVA DE PERMISOS (CÀMERA)
+    ----------------------------------------------------------- */
+    // Aquesta secció és clau per a la futura fase de Realitat Augmentada (RA).
+    // Demanar permisos aquí evita interrupcions brusques durant l'experiència 3D.
 
-    // Cas A: L'usuari prem "Donar permisos"
     requestCameraBtn?.addEventListener("click", async () => {
         try {
-            // Demanem el permís real al navegador
+            // SOL·LICITUD DE PERMÍS REAL: 
+            // Fem servir la Media Devices API per validar que l'usuari accepta la càmera.
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
 
-            // Un cop concedit, aturem la càmera immediatament per no gastar bateria
+            // OPTIMITZACIÓ DE BATERIA: 
+            // Un cop confirmat el permís, aturem immediatament els tracks de vídeo
+            // perquè no volem mostrar la càmera encara, només verificar l'accés.
             stream.getTracks().forEach(track => track.stop());
 
-            // Marquem com a vist i anem a Home
             finalitzarOnboarding();
         } catch (err) {
-            console.warn("L'usuari ha denegat els permisos o hi ha hagut un error:", err);
-            alert("Recorda que per a l'experiència de Realitat Augmentada caldrà que activis la càmera més tard.");
+            // GESTIÓ D'ERRORS I FALLBACK:
+            // Si l'usuari denega el permís, l'app segueix sent funcional però s'avisa
+            // de la limitació per a la futura RA.
+            console.warn("L'usuari ha denegat els permisos de càmera:", err);
+            alert("Podràs explorar el jaciment en 3D, però la funció de RA requerirà permisos més endavant.");
             finalitzarOnboarding();
         }
     });
 
-    // Cas B: L'usuari prem "Saltar"
     skipOnboardingBtn?.addEventListener("click", () => {
         finalitzarOnboarding();
     });
 
-    // Funció auxiliar per tancar l'onboarding i anar a la Home
+    /**
+     * Tanca l'onboarding, guarda l'estat i activa la navegació principal.
+     */
     function finalitzarOnboarding() {
+        // Guardem l'estat al navegador per a futures sessions
         localStorage.setItem("adarro_seen_onboarding", "true");
 
-        // Amaguem l'onboarding de totes les maneres possibles
         if (onboarding) {
             onboarding.classList.remove('active');
             onboarding.hidden = true;
-            onboarding.style.display = 'none'; // Ens assegurem que el CSS no el forci
+            onboarding.style.display = 'none';
         }
 
-        // Ara sí, cridem a la navegació principal
+        // Crida a la funció de navegació definida a app.js
         if (typeof window.navigateTo === "function") {
             window.navigateTo('home');
         } else {
             document.getElementById('home')?.classList.add('active');
         }
     }
-
 });
