@@ -346,7 +346,7 @@ p {
 }
 
 /* Quan el bloc té la classe 'open' (via JS), el contingut es desplega */
-.context-block.open .context-content {
+.context-block.active .context-content {
   max-height: 400px; /* Alçada màxima suficient per al text */
   padding-bottom: 14px;
 }
