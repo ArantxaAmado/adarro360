@@ -99,3 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
   window.toggleAudio = toggleAudio; // Exposem la funció a l'HTML
   window.toggleContext = toggleContext; // Exposem la funció dels textos
 });
+
+// --- REGISTRE DEL SERVICE WORKER PER A LA PWA ---
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        console.log('✅ SW registrat amb èxit! Scope:', reg.scope);
+      })
+      .catch(err => {
+        console.error('❌ Error al registrar el SW:', err);
+      });
+  });
+}
