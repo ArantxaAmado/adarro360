@@ -7,7 +7,7 @@
 // 1. CONFIGURACIÓ GLOBAL
 // Canviar la versió de CACHE_NAME obliga el navegador a instal·lar un nou SW, 
 // invalidant els fitxers antics (Gestió de versions).
-const CACHE_NAME = 'adarro-360-cache-v1.4'; // Harmonitzat amb el nom del projecte
+const CACHE_NAME = 'adarro-360-cache-v1.5'; // Incrementat a 1.5 per forçar l'actualització de la vil·la
 
 // Llista de precàrrega (Recursos crítics per a l'App Shell)
 const urlsToCache = [
@@ -21,7 +21,10 @@ const urlsToCache = [
   'js/GLTFLoader.js',
   'js/DRACOLoader.js', 
   'js/OrbitControls.js',
-  'assets/audio/historia_darro.mp3' 
+  'assets/audio/historia_darro.mp3',
+  // Models 3D per a funcionament offline
+  'assets/models/anfora.glb',
+  'assets/models/villa_darro.glb'
 ];
 
 // =====================================================
@@ -33,7 +36,7 @@ self.addEventListener('install', event => {
 
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      console.log('[SW] Creant App Shell: Guardant recursos crítics');
+      console.log('[SW] Creant App Shell: Guardant recursos crítics i models 3D');
       return cache.addAll(urlsToCache);
     })
   );
@@ -42,13 +45,12 @@ self.addEventListener('install', event => {
 // =====================================================
 // FASE 2: ACTIVACIÓ (Activate Event)
 // =====================================================
-// Aquí fem neteja de memòria per no col·lapsar el dispositiu de l'usuari.
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(name => {
-          // Si trobem una cache antiga (versió anterior), l'eliminem
+          // Si trobem una cache antiga, l'eliminem
           if (name.startsWith('adarro-') && name !== CACHE_NAME) {
             console.log('[SW] Netejant cache obsoleta:', name);
             return caches.delete(name);
@@ -57,50 +59,38 @@ self.addEventListener('activate', event => {
       );
     })
   );
-  // Reclama el control de les pàgines immediatament
   self.clients.claim();
 });
 
 // =====================================================
 // FASE 3: INTERCEPCIÓ DE PETICIONS (Fetch Event)
 // =====================================================
-// Implementem l'estratègia "Cache First, Network Fallback"
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
-      // Retornem el recurs si ja està a la cache (velocitat màxima)
       if (cachedResponse) return cachedResponse;
 
-      // Si no està a la cache, anem a buscar-lo a internet
       return fetch(event.request).then(networkResponse => {
-
-        // Verifiquem que la resposta sigui vàlida abans de guardar-la
         if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
           return networkResponse;
         }
 
-        // IMPORTANT: Clonem la resposta. 
-        // Les respostes de xarxa són "streams" i només es poden llegir una vegada.
         const responseToCache = networkResponse.clone();
 
-        // --- GESTIÓ DE CACHE PROGRESSIVA ---
-        // Guardem automàticament els recursos nous (com els models .glb) 
-        // a mesura que l'usuari els descarrega per primer cop.
+        // GESTIÓ DE CACHE PROGRESSIVA (Per a models que no estiguin a la llista inicial)
         caches.open(CACHE_NAME).then(cache => {
           cache.put(event.request, responseToCache);
         });
 
         return networkResponse;
       })
-        .catch(error => {
-          // --- FALLBACK OFFLINE ---
-          // Si no hi ha xarxa ni cache, i l'usuari intenta carregar la pàgina principal:
-          if (event.request.destination === 'document') {
-            return caches.match('offline.html');
-          }
-        });
+      .catch(error => {
+        if (event.request.destination === 'document') {
+          return caches.match('offline.html');
+        }
+      });
     })
   );
 });
