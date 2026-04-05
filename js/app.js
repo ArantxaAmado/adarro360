@@ -45,11 +45,12 @@ function navigateTo(targetId) {
   setTimeout(() => {
     if (window.initVisor3D) {
       if (targetId === 'anfora') {
+        // Carrega el model de l'objecte (Ànfora)
         const visor = window.initVisor3D('assets/models/anfora.glb');
         if (visor?.renderer) currentRenderer = visor.renderer;
       } else if (targetId === 'visor') {
-        // Nota: Aquí carregaríem el model de la Vil·la en la fase final
-        const visor = window.initVisor3D('assets/models/anfora.glb');
+        // MODIFICACIÓ: Carrega el model volumètric de la Vil·la Romana (Greyboxing)
+        const visor = window.initVisor3D('assets/models/villa_darro.glb');
         if (visor?.renderer) currentRenderer = visor.renderer;
       }
     }
