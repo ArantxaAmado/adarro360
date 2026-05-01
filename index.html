@@ -2,16 +2,16 @@
 <html lang="ca">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ADARRÓ360 – Finestra al passat</title>
 
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#cc7755">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -91,34 +91,34 @@
         <div class="launcher-buttons">
 
             <!-- EXPLORAR JACIMENT -->
-            <button class="launcher-card" onclick="navigateTo('explorar')">
-                <div class="launcher-icon">
-                    <img src="assets/icon/camera_ra.png" alt="RA" />
-                </div>
+            <a class="launcher-card" onclick="navigateTo('explorar')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/camera_ra.png" alt="RA">
+                </span>
                 <div class="launcher-text">
-                    <h3>EXPLORA EL JACIMENT (RA)</h3>
+                    <h2>EXPLORA EL JACIMENT (RA)</h2>
                 </div>
-            </button>
+            </a>
 
             <!-- CONTEXT HISTÒRIC -->
-            <button class="launcher-card" onclick="navigateTo('context')">
-                <div class="launcher-icon">
-                    <img src="assets/icon/context.png" alt="Context" />
-                </div>
+            <a class="launcher-card" onclick="navigateTo('context')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/context.png" alt="Context">
+                </span>
                 <div class="launcher-text">
-                    <h3>CONTEXT HISTÒRIC</h3>
+                    <h2>CONTEXT HISTÒRIC</h2>
                 </div>
-            </button>
+            </a>
 
             <!-- COL·LECCIÓ DE PECES -->
-            <button class="launcher-card" onclick="navigateTo('peces')">
-                <div class="launcher-icon">
-                    <img src="assets/icon/peces.png" alt="Peces" />
-                </div>
+            <a class="launcher-card" onclick="navigateTo('peces')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/peces.png" alt="Peces">
+                </span>
                 <div class="launcher-text">
-                    <h3>COL·LECCIÓ DE PECES</h3>
+                    <h2>COL·LECCIÓ DE PECES</h2>
                 </div>
-            </button>
+            </a>
 
         </div>
 
@@ -133,7 +133,7 @@
         </div>
 
         <div class="context-hero">
-            <img src="assets/img/context_hero.jpeg" alt="Jaciment Adarró" />
+            <img src="assets/img/context_hero.jpeg" alt="Jaciment Adarró">
         </div>
 
         <div class="audio-card">
@@ -141,7 +141,7 @@
                 <span class="material-symbols-outlined">play_circle</span>
             </button>
             <div class="audio-info">
-                <h4>Escolta la història narrada</h4>
+                <h3>Escolta la història narrada</h3>
                 <span>Durada: 2:00 minuts</span>
             </div>
         </div>
@@ -269,17 +269,17 @@
         <div class="pieces-card-list">
 
             <article class="pieces-card" onclick="navigateTo('anfora')">
-                <img src="assets/img/amphora.png" class="pieces-card-image" />
+                <img src="assets/img/amphora.png" class="pieces-card-image" alt="Anfora íbera">
                 <div class="pieces-card-content">
-                    <h4 class="card-title">Ànfora ibèrica</h4>
+                    <h3 class="card-title">Ànfora ibèrica</h3>
                 </div>
                 <button class="details-btn">DETALLS</button>
             </article>
 
             <article class="pieces-card">
-                <img src="assets/img/coins.png" class="pieces-card-image" />
+                <img src="assets/img/coins.png" class="pieces-card-image" alt="Moneda romana">
                 <div class="pieces-card-content">
-                    <h4 class="card-title">Moneda romana</h4>
+                    <h3 class="card-title">Moneda romana</h3>
                 </div>
                 <button class="details-btn">DETALLS</button>
             </article>
