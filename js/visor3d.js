@@ -1,8 +1,15 @@
+// ==========================================================================
+// VISOR 3D + RA – VERSIÓ FINAL I ESTABLE
+// ==========================================================================
+
 import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/controls/OrbitControls.js';
 import { DRACOLoader } from 'https://cdn.skypack.dev/three@0.128.0/examples/jsm/loaders/DRACOLoader.js';
 
+// --------------------------------------------------------------------------
+// VARIABLES GLOBALS
+// --------------------------------------------------------------------------
 let scene, camera, renderer, controls, animationId;
 let initialCameraPosition, initialControlsTarget;
 let isDarkMode = false;
@@ -16,6 +23,10 @@ let reticle = null;
 let arModel = null;
 let isARMode = false;
 
+// ==========================================================================
+// INICIALITZACIÓ DEL VISOR 3D
+// ==========================================================================
+
 window.initVisor3D = function (containerId, modelPath) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -24,36 +35,43 @@ window.initVisor3D = function (containerId, modelPath) {
   const height = container.clientHeight;
   if (width === 0 || height === 0) return;
 
+  // Si ja hi havia un visor → neteja
   if (renderer) window.disposeVisor3D();
 
+  // Escena i renderer
   scene = new THREE.Scene();
   scene.background = new THREE.Color(isDarkMode ? 0x1a1a1a : 0xeeeeee);
 
   camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.outputEncoding = THREE.sRGBEncoding;
 
   container.appendChild(renderer.domElement);
 
-  // Si és l’ànfora → mode 3D normal
+  // MODE 3D NORMAL (ÀNFORA)
   if (containerId === 'd-container-piece') {
     setupNormalControls();
     loadModel(modelPath, false);
     startNormalLoop();
   }
 
-  // Si és el visor del jaciment → preparació per AR
+  // MODE AR (JACIMENT)
   if (containerId === 'd-container-ra') {
     isARMode = true;
     renderer.xr.enabled = true;
+
     setupARSceneLights();
-    loadModel(modelPath, true); // es carregarà però no es col·locarà fins al hit-test
     setupReticle();
+
+    // IMPORTANT:
+    // El model AR NO es carrega aquí.
+    // Es carregarà DESPRÉS d'iniciar la sessió AR.
   }
 
+  // Resize
   resizeHandler = () => {
     const w = container.clientWidth;
     const h = container.clientHeight;
@@ -65,6 +83,10 @@ window.initVisor3D = function (containerId, modelPath) {
   window.addEventListener('resize', resizeHandler);
 };
 
+// ==========================================================================
+// MODE 3D NORMAL
+// ==========================================================================
+
 function setupNormalControls() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
@@ -75,9 +97,18 @@ function setupNormalControls() {
   scene.add(dirLight);
 }
 
-function setupARSceneLights() {
-  scene.add(new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1));
+function startNormalLoop() {
+  function animate() {
+    animationId = requestAnimationFrame(animate);
+    if (controls) controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
 }
+
+// ==========================================================================
+// CARREGAR MODELS (3D i AR)
+// ==========================================================================
 
 function loadModel(modelPath, forAR) {
   const loader = new GLTFLoader();
@@ -91,35 +122,38 @@ function loadModel(modelPath, forAR) {
       const model = gltf.scene;
 
       if (forAR) {
+        // MODE AR → el model s’amaga fins que el reticle trobi superfície
         arModel = model;
         arModel.visible = false;
         scene.add(arModel);
-      } else {
-        scene.add(model);
-
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-
-        model.position.sub(center);
-
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const camDistFactor = modelPath.includes('villa') ? 2.5 : 1.5;
-
-        camera.position.set(
-          maxDim * camDistFactor,
-          maxDim * 1.2,
-          maxDim * camDistFactor
-        );
-
-        camera.lookAt(0, 0, 0);
-
-        initialCameraPosition = camera.position.clone();
-        initialControlsTarget = new THREE.Vector3(0, 0, 0);
-
-        controls.target.set(0, 0, 0);
-        controls.update();
+        return;
       }
+
+      // MODE 3D NORMAL
+      scene.add(model);
+
+      const box = new THREE.Box3().setFromObject(model);
+      const center = box.getCenter(new THREE.Vector3());
+      const size = box.getSize(new THREE.Vector3());
+
+      model.position.sub(center);
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const camDistFactor = modelPath.includes('villa') ? 2.5 : 1.5;
+
+      camera.position.set(
+        maxDim * camDistFactor,
+        maxDim * 1.2,
+        maxDim * camDistFactor
+      );
+
+      camera.lookAt(0, 0, 0);
+
+      initialCameraPosition = camera.position.clone();
+      initialControlsTarget = new THREE.Vector3(0, 0, 0);
+
+      controls.target.set(0, 0, 0);
+      controls.update();
     },
     undefined,
     (error) => {
@@ -128,25 +162,31 @@ function loadModel(modelPath, forAR) {
   );
 }
 
-function startNormalLoop() {
-  function animate() {
-    animationId = requestAnimationFrame(animate);
-    if (controls) controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
+// ==========================================================================
+// MODE AR – CONFIGURACIÓ
+// ==========================================================================
+
+function setupARSceneLights() {
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1));
 }
 
-// ---------- AR ----------
-
 function setupReticle() {
-  const geometry = new THREE.RingGeometry(0.2, 0.25, 32).rotateX(-Math.PI / 2);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const geometry = new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    opacity: 0.6,
+    transparent: true
+  });
+
   reticle = new THREE.Mesh(geometry, material);
   reticle.matrixAutoUpdate = false;
   reticle.visible = false;
   scene.add(reticle);
 }
+
+// ==========================================================================
+// INICIAR SESSIÓ AR
+// ==========================================================================
 
 window.startARSession = async function () {
   if (!navigator.xr) {
@@ -165,23 +205,18 @@ window.startARSession = async function () {
       requiredFeatures: ['hit-test', 'local-floor']
     });
 
-    xrSession.addEventListener('end', () => {
-      xrSession = null;
-      hitTestSource = null;
-      renderer.setAnimationLoop(null);
-    });
-
     renderer.xr.setSession(xrSession);
 
-    const refSpace = await xrSession.requestReferenceSpace('local-floor');
-    xrRefSpace = refSpace;
+    xrRefSpace = await xrSession.requestReferenceSpace('local-floor');
 
     const viewerSpace = await xrSession.requestReferenceSpace('viewer');
-    const hitTestSourceReq = await xrSession.requestHitTestSource({ space: viewerSpace });
-    hitTestSource = hitTestSourceReq;
+    hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
+
+    // Ara sí: carreguem el model AR
+    loadModel('assets/models/villa_darro.glb', true);
 
     xrSession.addEventListener('select', () => {
-      if (reticle && reticle.visible && arModel) {
+      if (reticle.visible && arModel) {
         arModel.position.setFromMatrixPosition(reticle.matrix);
         arModel.visible = true;
       }
@@ -194,6 +229,10 @@ window.startARSession = async function () {
     alert('No s’ha pogut iniciar la RA.');
   }
 };
+
+// ==========================================================================
+// RENDER LOOP AR
+// ==========================================================================
 
 function renderAR(timestamp, frame) {
   if (!frame || !xrRefSpace || !hitTestSource) {
@@ -218,7 +257,9 @@ function renderAR(timestamp, frame) {
   renderer.render(scene, camera);
 }
 
-// ---------- API GLOBAL EXTRA ----------
+// ==========================================================================
+// FUNCIONS EXTRA
+// ==========================================================================
 
 window.toggleVisorTheme = function () {
   isDarkMode = !isDarkMode;
@@ -233,6 +274,10 @@ window.resetCamera3D = function () {
   controls.target.copy(initialControlsTarget);
   controls.update();
 };
+
+// ==========================================================================
+// NETEJA DEL VISOR
+// ==========================================================================
 
 window.disposeVisor3D = function () {
   if (animationId) cancelAnimationFrame(animationId);
