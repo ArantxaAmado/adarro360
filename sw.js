@@ -7,7 +7,7 @@
 // 1. CONFIGURACIÓ GLOBAL
 // Canviar la versió de CACHE_NAME obliga el navegador a instal·lar un nou SW, 
 // invalidant els fitxers antics (Gestió de versions).
-const CACHE_NAME = 'adarro-360-cache-v1.5'; // Incrementat a 1.5 per forçar l'actualització de la vil·la
+const CACHE_NAME = 'adarro-360-cache-v1.6'; // Incrementat a 1.6 per forçar l'actualització de la vil·la
 
 // Llista de precàrrega (Recursos crítics per a l'App Shell)
 const urlsToCache = [
