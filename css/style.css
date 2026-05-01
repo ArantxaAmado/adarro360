@@ -617,13 +617,16 @@ p {
   overflow: hidden;
 }
 
+/* Pantalla RA: ocupa tota la pantalla REAL només quan està activa */
 #visor.screen.active {
-    display: block !important;
-    position: relative !important;
-    width: 100vw !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
     height: 100vh !important;
+    width: 100vw !important;
+    position: relative !important;
     overflow: hidden !important;
 }
+
 
 /* Assegura que el contenidor del visor AR té mida */
 #d-container-ra {
