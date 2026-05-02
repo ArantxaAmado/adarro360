@@ -1,139 +1,143 @@
 // ==========================================================================
-// LÒGICA DE CONTROL DE L'APLICACIÓ – ADARRÓ 360 (VERSIÓ FINAL CORREGIDA)
+// APP.JS FINAL – NAVEGACIÓ SENSE DOBLE CRIDA
 // ==========================================================================
 
 let activeScreen = 'home';
 let currentAudio = null;
 
-/**
- * GESTIÓ DE NAVEGACIÓ ENTRE PANTALLES
- * @param {string} targetId - ID de la secció de destí
- */
+// --------------------------------------------------------------------------
+// CONTROL D'ACCÉS A LA RA
+// --------------------------------------------------------------------------
+function canEnterRA() {
+  return !!localStorage.getItem("adarro_seen_onboarding");
+}
+
+// --------------------------------------------------------------------------
+// NAVEGACIÓ ENTRE PANTALLES
+// --------------------------------------------------------------------------
 function navigateTo(targetId) {
-  if (activeScreen === targetId) return;
+  console.log("NAVIGATE CALLED:", targetId, "active:", activeScreen);
 
-  console.log(`[App] Navegant cap a: ${targetId}`);
-
-  // 1. NETEJA DE RECURSOS 3D
-  // Cridem a la funció de neteja global definida a visor3d.js per alliberar GPU
-  if (typeof window.disposeVisor3D === 'function') {
-    window.disposeVisor3D();
+  // Evitar navegació duplicada
+  if (activeScreen === targetId) {
+    console.warn("Bloquejada navegació duplicada cap a:", targetId);
+    return;
   }
 
-  // 2. GESTIÓ DEL SCROLL DEL BODY
-  // Si anem al visor, bloquegem l'scroll del body perquè l'experiència 3D sigui fixa
-  if (targetId === 'visor' || targetId === 'anfora') {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
+  // Netejar visor anterior
+  if (window.disposeVisor3D) window.disposeVisor3D();
 
-  // 3. CANVI VISUAL DE PANTALLES
-  document.getElementById('splash')?.classList.remove('active');
-  document.getElementById('onboarding')?.classList.remove('active');
+  // Ocultar totes les pantalles
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-  document.querySelectorAll('.screen').forEach(screen => {
-    screen.classList.toggle('active', screen.id === targetId);
-  });
-
-  // 4. ACTUALITZACIÓ DE LA BARRA DE NAVEGACIÓ (NAV-BAR)
-  document.querySelectorAll('.nav-item').forEach(item => {
-    const action = item.getAttribute('onclick');
-    item.classList.toggle('active', action && action.includes(`'${targetId}'`));
-  });
+  // Mostrar només la pantalla objectiu
+  const targetScreen = document.getElementById(targetId);
+  targetScreen.classList.add('active');
 
   activeScreen = targetId;
 
-  // 5. INICIALITZACIÓ DEL MOTOR 3D
+  // Inicialitzar visor quan tingui mida
   if (targetId === 'anfora' || targetId === 'visor') {
-    // Esperem un marge perquè el CSS s'apliqui i el contenidor tingui mides reals
-    setTimeout(() => {
-      const container = document.getElementById('d-container');
-      
-      if (window.initVisor3D && container) {
-        // Seleccionem el model segons la pantalla
-        const modelPath = (targetId === 'anfora') 
-          ? 'assets/models/anfora.glb' 
-          : 'assets/models/villa_darro.glb';
-        
-        console.log(`[App] Sol·licitant càrrega al visor: ${modelPath}`);
-        window.initVisor3D(modelPath);
+    const containerId = targetId === 'anfora' ? 'd-container-piece' : 'd-container-ra';
+    const container = document.getElementById(containerId);
+
+    waitForContainerSize(container).then(() => {
+      init3DForScreen(targetId);
+    });
+  }
+}
+
+
+// --------------------------------------------------------------------------
+// ESPERAR FINS QUE UN CONTENIDOR TINGUI MIDA REAL
+// --------------------------------------------------------------------------
+function waitForContainerSize(container, timeout = 3000) {
+  return new Promise((resolve, reject) => {
+    const start = performance.now();
+
+    function check() {
+      if (container.clientWidth > 0 && container.clientHeight > 0) {
+        resolve();
+      } else if (performance.now() - start > timeout) {
+        console.warn("Timeout esperant mida del contenidor");
+        resolve();
+      } else {
+        requestAnimationFrame(check);
       }
-    }, 250); 
+    }
+
+    check();
+  });
+}
+
+// --------------------------------------------------------------------------
+// INICIALITZAR VISOR 3D
+// --------------------------------------------------------------------------
+function init3DForScreen(targetId) {
+  let containerId, modelPath;
+
+  if (targetId === 'anfora') {
+    containerId = 'd-container-piece';
+    modelPath = 'assets/models/anfora.glb';
   }
+
+  if (targetId === 'visor') {
+    containerId = 'd-container-ra';
+    modelPath = 'assets/models/villa_darro.glb';
+  }
+
+  console.log("[App] Inicialitzant visor:", containerId);
+  window.initVisor3D(containerId, modelPath);
 }
 
-/**
- * FUNCIONS D'INTERACCIÓ (Exposades a l'HTML)
- */
-function toggleMode() {
-  if (window.toggleVisorTheme) window.toggleVisorTheme();
-}
-
+// --------------------------------------------------------------------------
+// UI
+// --------------------------------------------------------------------------
+function toggleMode() { window.toggleVisorTheme?.(); }
 function toggleInfoPanel() {
-  const panel = document.querySelector('.screen.active .info-panel');
-  if (panel) panel.classList.toggle('hidden');
+  const panel = document.querySelector('#anfora .info-panel');
+  panel?.classList.toggle('hidden');
 }
+function resetCamera() { window.resetCamera3D?.(); }
 
-function resetCamera() {
-  // Cridem a la funció de reset específica del visor3d.js
-  if (window.resetCamera3D) {
-    window.resetCamera3D();
-  } else if (window.resetCamera) {
-    window.resetCamera();
-  }
-}
-
-/**
- * CONTROL DE L'AUDIOGUIA
- */
+// --------------------------------------------------------------------------
+// AUDIO
+// --------------------------------------------------------------------------
 function toggleAudio() {
-  if (!currentAudio) {
-    currentAudio = new Audio('assets/audio/historia_darro.mp3'); 
-  }
-
-  const playIcon = document.querySelector('.play-btn span');
+  if (!currentAudio) currentAudio = new Audio('assets/audio/historia_darro.mp3');
+  const icon = document.querySelector('.play-btn span');
 
   if (currentAudio.paused) {
-    currentAudio.play().catch(e => console.warn("L'usuari ha d'interaccionar primer per reproduir àudio"));
-    if (playIcon) playIcon.textContent = 'pause_circle';
+    currentAudio.play();
+    icon.textContent = 'pause_circle';
   } else {
     currentAudio.pause();
-    if (playIcon) playIcon.textContent = 'play_circle';
-  }
-
-  currentAudio.onended = () => {
-    if (playIcon) playIcon.textContent = 'play_circle';
-  };
-}
-
-/**
- * CONTROL DE DESPLEGABLES (CONTEXT)
- */
-function toggleContext(header) {
-  if (header && header.parentElement) {
-    header.parentElement.classList.toggle('active');
+    icon.textContent = 'play_circle';
   }
 }
 
-/**
- * INICIALITZACIÓ GLOBAL
- */
+// --------------------------------------------------------------------------
+// INICIALITZACIÓ GENERAL
+// --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  // Exposició de funcions al window per als onclick de l'HTML
   window.navigateTo = navigateTo;
   window.toggleMode = toggleMode;
   window.toggleInfoPanel = toggleInfoPanel;
   window.resetCamera = resetCamera;
-  window.toggleAudio = toggleAudio; 
-  window.toggleContext = toggleContext;
-});
+  window.toggleAudio = toggleAudio;
 
-// SERVICE WORKER (PWA)
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('✅ PWA: Service Worker actiu'))
-      .catch(err => console.error('❌ PWA: Error:', err));
+  // Evitar clics fantasma
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.addEventListener('click', e => e.stopPropagation());
   });
-}
+
+  // Botó RA
+  const startARBtn = document.getElementById('startARBtn');
+  if (startARBtn) {
+    startARBtn.addEventListener('click', async () => {
+      navigateTo('visor');
+      await waitForContainerSize(document.getElementById('d-container-ra'));
+      window.startARSession?.();
+    });
+  }
+});

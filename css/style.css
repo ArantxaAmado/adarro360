@@ -12,8 +12,10 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Evitem el desplaçament horitzontal en mòbils */
-  background-color: #F2E2C4; /* Color sorra d'identitat arqueològica */
+  overflow-x: hidden;
+  /* Evitem el desplaçament horitzontal en mòbils */
+  background-color: #F2E2C4;
+  /* Color sorra d'identitat arqueològica */
   font-family: sans-serif;
 }
 
@@ -22,50 +24,42 @@ body {
   padding-bottom: 80px;
 }
 
-/* --------------------------------------------------------
-   GESTIÓ DE PANTALLES (SPA Workflow)
-   Permet canviar de secció sense recarregar la pàgina
-   -------------------------------------------------------- */
-.screen {
-  display: none; /* Totes les pantalles ocultes per defecte */
-  padding: 20px;
-  min-height: calc(100vh - 80px);
+
+
+#visor.screen {
+    padding: 0 !important;
+    min-height: 100vh !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    position: relative !important;
+    overflow: hidden !important;
 }
 
-.screen.active {
-  display: block; /* Només es mostra la pantalla amb la classe 'active' */
-}
 
-/* Forçat d'ocultació per a elements temporals */
-.hidden {
-  display: none !important;
-}
-
-/* --------------------------------------------------------
-   MILLORA DEL PANELL D'INFORMACIÓ
-   Targetes descriptives per als detalls dels objectes 3D
-   -------------------------------------------------------- */
-.info-panel {
-  margin-top: 15px;
-  padding: 15px;
-  background: #FCF6EA; /* Tons crema per contrastar amb el fons */
-  border-radius: 20px;
-  border: 2px solid #333;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  
-  /* Animació d'entrada: Fa que el panell pugi suaument en aparèixer */
-  animation: slideIn 0.3s ease-out;
+#anfora .info-panel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  margin-top: 0;
+  background: rgba(252, 246, 234, 0.5);
+  /* Transparent */
+  backdrop-filter: blur(4px);
+  /* Efecte vidre bonic */
+  padding: 12px;
+  font-size: 0.85rem;
 }
 
 /* Definició de l'animació de lliscament vertical */
 @keyframes slideIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(10px); 
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -162,10 +156,12 @@ p {
   align-items: center;
   gap: 20px;
   padding: 16px;
-  border-radius: 30px; /* Cantons molt arrodonits per a un look modern/app */
+  border-radius: 30px;
+  /* Cantons molt arrodonits per a un look modern/app */
   border: 2px solid #333;
   background-color: #FCF6EA;
-  box-shadow: 0 3px 11px 0px #777; /* Ombres per donar profunditat (elevació) */
+  box-shadow: 0 3px 11px 0px #777;
+  /* Ombres per donar profunditat (elevació) */
   cursor: pointer;
   text-align: left;
 }
@@ -198,14 +194,19 @@ p {
    Millora l'experiència d'usuari (UX) en fer els canvis fluids
    -------------------------------------------------------- */
 .screen.active {
-    display: block;
-    animation: fadeIn 0.3s ease-in;
+  display: block;
+  animation: fadeIn 0.3s ease-in;
 }
 
 /* Definició de l'efecte d'aparició gradual (fade) */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ======================================================== */
@@ -221,12 +222,14 @@ p {
   width: 100%;
   height: 70px;
   display: flex;
-  justify-content: space-around; /* Distribució equitativa de les icones */
+  justify-content: space-around;
+  /* Distribució equitativa de les icones */
   align-items: center;
   background-color: #fff;
   /* Ombra superior per separar visualment la nav del contingut */
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.08);
-  z-index: 100; /* Ens assegurem que quedi sempre per sobre de l'escena 3D */
+  z-index: 100;
+  /* Ens assegurem que quedi sempre per sobre de l'escena 3D */
 }
 
 /* Estructura vertical: Icona a dalt i text a sota */
@@ -257,7 +260,8 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-radius: 40px; /* Forma d'el·lipse/càpsula */
+  border-radius: 40px;
+  /* Forma d'el·lipse/càpsula */
   border: 2px solid black;
   padding: 8px 15px;
   margin-bottom: 16px;
@@ -301,7 +305,7 @@ p {
   margin-bottom: 20px;
 }
 
-.audio-card h4 {
+.audio-card h3 {
   margin: 0px;
 }
 
@@ -347,7 +351,8 @@ p {
 
 /* Quan el bloc té la classe 'open' (via JS), el contingut es desplega */
 .context-block.active .context-content {
-  max-height: 400px; /* Alçada màxima suficient per al text */
+  max-height: 400px;
+  /* Alçada màxima suficient per al text */
   padding-bottom: 14px;
 }
 
@@ -409,7 +414,8 @@ p {
 #explorar.active {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Situa la UI a la part inferior per ergonomia */
+  justify-content: flex-end;
+  /* Situa la UI a la part inferior per ergonomia */
   padding: 20px;
   position: relative;
   overflow: hidden;
@@ -422,7 +428,7 @@ p {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-image: url('../assets/img/jaciment.jpg');
   background-size: cover;
   background-position: center;
@@ -449,20 +455,81 @@ p {
   z-index: 1;
 }
 
+
+/* ========================= PANTALLES ========================= */
+
+/* Totes les pantalles ocultes per defecte */
+.screen {
+  display: none !important;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+/* Només la pantalla activa es mostra */
+.screen.active {
+  display: block !important;
+}
+
+/* Pantalla ANFORA ocupa tota la pantalla */
+#anfora.screen.active {
+  display: flex !important;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Pantalla VISOR RA ocupa tota la pantalla */
+#visor.screen.active {
+  display: block !important;
+  padding: 0 !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+}
+
+/* ========================= VISOR 3D ========================= */
+
+.visor-wrapper {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  background: #e6e6e6;
+  overflow: visible;
+}
+
+#d-container-piece,
+#d-container-ra {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #e6e6e6;
+  z-index: 1;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
 /* --------------------------------------------------------
    EXPLORE CARD (Interfície de Realitat Augmentada)
    Simula la finestra d'escaneig o inici de la RA
    -------------------------------------------------------- */
 .explore-card {
-  background-color: rgba(252, 246, 234, 0.9); /* Transparència per veure el fons */
+  position: relative;
+  background-color: rgba(252, 246, 234, 0.9);
+  /* Transparència per veure el fons */
   border: 2px solid #333;
   border-radius: 30px;
   padding: 16px;
   display: flex;
   gap: 15px;
-  margin-top: 20px;
-  z-index: 1;
+  margin-top: 100px;
+  z-index: 10;
 }
+
 
 /* Divisió de contingut: Esquerra (Text/Acció) vs Dreta (Info/Imatge) */
 .explore-left {
@@ -498,7 +565,8 @@ p {
   position: relative;
   width: 100%;
   height: 80vh;
-  background: black; /* Fons fosc per evitar centellejos mentre carrega la càmera */
+  background: black;
+  /* Fons fosc per evitar centellejos mentre carrega la càmera */
   overflow: hidden;
 }
 
@@ -515,7 +583,8 @@ p {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5); /* Semitransparent per no tapar la visió de la càmera */
+  background: rgba(0, 0, 0, 0.5);
+  /* Semitransparent per no tapar la visió de la càmera */
   color: #fff;
   border: 2px solid #fff;
   display: flex;
@@ -523,43 +592,66 @@ p {
   justify-content: center;
 }
 
+.ra-start-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 50%;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.ra-start-btn .material-icons {
+  font-size: 32px;
+  color: #333;
+}
+
 /* --------------------------------------------------------
    VISOR D'OBJECTE INDIVIDUAL (Detall de Peça)
    -------------------------------------------------------- */
-.visor-wrapper {
-  position: relative;
-  width: 100%;
-  height: 500px;
-  background: #e6e6e6;
-  border-radius: 15px;
-  overflow: hidden;
-  margin-top: 10px;
-}
 
 
-/* Contenidor on es renderitza el model 3D (Three.js / Model-viewer) */
-#d-container {
-  width: 100%;
-  height: 100%; 
-  background-color: #e6e6e6;
-  display: block;
-
-}
-
-canvas {
-  display: block !important;
-}
-
-/* Controls flotants sobre el visor 3D */
-.visor-controls {
-  position: absolute;
-  top: 15px;
-  left: 15px;
+#anfora.screen {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  z-index: 10;
+  height: 100vh;
+  overflow: hidden;
 }
+
+
+
+
+
+/* Pantalles per defecte */
+.screen {
+    display: none;
+    padding: 20px;
+    min-height: calc(100vh - 80px);
+}
+
+/* Pantalla activa */
+.screen.active {
+    display: block !important;
+}
+
+
+
+
+
+
+canvas {
+  display: block;
+}
+
+
 
 .visor-controls button {
   width: 45px;
@@ -573,15 +665,6 @@ canvas {
   justify-content: center;
 }
 
-/* Panell d'informació que apareix sota el visor */
-.info-panel {
-  margin-top: 15px;
-  padding: 15px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 /* ======================================================== */
 /* 10. SPLASH SCREEN (Pantalla de càrrega)                  */
 /* ======================================================== */
@@ -592,7 +675,7 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(242,226,196,0.98), rgba(242,226,196,0.95));
+  background: linear-gradient(180deg, rgba(242, 226, 196, 0.98), rgba(242, 226, 196, 0.95));
   z-index: 2000;
   padding: 20px;
 }
@@ -601,11 +684,11 @@ canvas {
   text-align: center;
   max-width: 520px;
   width: calc(100% - 40px);
-  background: rgba(252,246,234,0.95);
+  background: rgba(252, 246, 234, 0.95);
   border-radius: 20px;
   padding: 28px;
   border: 2px solid #333;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .splash-logo {
@@ -626,8 +709,9 @@ canvas {
 
 .splash-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg,#b36a4c,#8a4f3a);
-  width: 0%; /* Es controla via JS durant la càrrega */
+  background: linear-gradient(90deg, #b36a4c, #8a4f3a);
+  width: 0%;
+  /* Es controla via JS durant la càrrega */
   transition: width 300ms ease;
 }
 
@@ -650,7 +734,7 @@ canvas {
   width: calc(100% - 40px);
   border-radius: 20px;
   padding: 22px;
-  background: rgba(252,246,234,0.98);
+  background: rgba(252, 246, 234, 0.98);
   border: 2px solid #333;
 }
 
@@ -660,6 +744,12 @@ canvas {
   color: #333;
 }
 
+#splash,
+#onboarding {
+  display: none !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
 .onboarding-steps li {
   margin-bottom: 12px;
 }
@@ -679,7 +769,7 @@ canvas {
   position: fixed;
   inset: 0;
   /* El HUD és transparent als clics per defecte per poder moure el 3D */
-  pointer-events: none; 
+  pointer-events: none;
   z-index: 1500;
   display: none;
   flex-direction: column;
@@ -688,18 +778,21 @@ canvas {
 }
 
 /* Reactivem els clics només per als elements interactius (botons) */
-.hud * { pointer-events: auto; }
+.hud * {
+  pointer-events: auto;
+}
 
 .hud-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  background: rgba(252,246,234,0.6);
+  background: rgba(252, 246, 234, 0.6);
   padding: 8px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(0,0,0,0.12);
-  backdrop-filter: blur(6px); /* Efecte modern de desenfocament de fons */
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+  /* Efecte modern de desenfocament de fons */
 }
 
 .hud-title {
@@ -712,20 +805,22 @@ canvas {
   justify-content: center;
   align-items: center;
   margin-top: 8vh;
-  pointer-events: none; /* L'indicador central no ha d'interferir amb els gestos */
+  pointer-events: none;
+  /* L'indicador central no ha d'interferir amb els gestos */
 }
 
 .hud-bottom {
   display: flex;
   justify-content: space-around;
   gap: 12px;
-  background: rgba(252,246,234,0.85);
+  background: rgba(252, 246, 234, 0.85);
   padding: 10px;
   border-radius: 18px;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-.hud-btn, .hud-action {
+.hud-btn,
+.hud-action {
   background: #fff;
   border: 2px solid #b36a4c;
   color: #3a2b24;
@@ -754,8 +849,17 @@ canvas {
 /* ======================================================== */
 
 @media (max-width: 480px) {
+
   /* Reducció de paddings per a telèfons amb pantalles molt petites */
-  .splash-inner { padding: 18px; }
-  .onboarding-inner { padding: 16px; }
-  .hud-bottom { padding: 8px; }
+  .splash-inner {
+    padding: 18px;
+  }
+
+  .onboarding-inner {
+    padding: 16px;
+  }
+
+  .hud-bottom {
+    padding: 8px;
+  }
 }

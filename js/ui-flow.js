@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             onboarding.classList.remove('active');
             onboarding.hidden = true;
             onboarding.style.display = 'none';
+            onboarding.style.pointerEvents = "none";
         }
 
         // Crida a la funció de navegació definida a app.js
