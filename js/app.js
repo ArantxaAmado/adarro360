@@ -1,9 +1,14 @@
 // ==========================================================================
-// APP.JS FINAL – NAVEGACIÓ SENSE DOBLE CRIDA
+// APP.JS – Versió optimitzada i estable
 // ==========================================================================
 
 let activeScreen = 'home';
 let currentAudio = null;
+
+let modelLoaded = {
+  anfora: false,
+  visor: false
+};
 
 // --------------------------------------------------------------------------
 // CONTROL D'ACCÉS A LA RA
@@ -16,27 +21,28 @@ function canEnterRA() {
 // NAVEGACIÓ ENTRE PANTALLES
 // --------------------------------------------------------------------------
 function navigateTo(targetId) {
-  console.log("NAVIGATE CALLED:", targetId, "active:", activeScreen);
+  console.log("NAVIGATE:", activeScreen, "→", targetId);
 
-  // Evitar navegació duplicada
   if (activeScreen === targetId) {
-    console.warn("Bloquejada navegació duplicada cap a:", targetId);
+    console.warn("Navegació duplicada bloquejada:", targetId);
     return;
   }
 
-  // Netejar visor anterior
-  if (window.disposeVisor3D) window.disposeVisor3D();
+  // Destruir visor només si cal
+  if (activeScreen === 'anfora' || activeScreen === 'visor') {
+    if (window.disposeVisor3D) window.disposeVisor3D();
+  }
 
   // Ocultar totes les pantalles
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-  // Mostrar només la pantalla objectiu
+  // Mostrar pantalla objectiu
   const targetScreen = document.getElementById(targetId);
   targetScreen.classList.add('active');
 
   activeScreen = targetId;
 
-  // Inicialitzar visor quan tingui mida
+  // Inicialitzar visor 3D si cal
   if (targetId === 'anfora' || targetId === 'visor') {
     const containerId = targetId === 'anfora' ? 'd-container-piece' : 'd-container-ra';
     const container = document.getElementById(containerId);
@@ -47,12 +53,11 @@ function navigateTo(targetId) {
   }
 }
 
-
 // --------------------------------------------------------------------------
 // ESPERAR FINS QUE UN CONTENIDOR TINGUI MIDA REAL
 // --------------------------------------------------------------------------
 function waitForContainerSize(container, timeout = 3000) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     const start = performance.now();
 
     function check() {
@@ -74,6 +79,11 @@ function waitForContainerSize(container, timeout = 3000) {
 // INICIALITZAR VISOR 3D
 // --------------------------------------------------------------------------
 function init3DForScreen(targetId) {
+  if (modelLoaded[targetId]) {
+    console.log("[App] Model ja carregat:", targetId);
+    return;
+  }
+
   let containerId, modelPath;
 
   if (targetId === 'anfora') {
@@ -88,16 +98,20 @@ function init3DForScreen(targetId) {
 
   console.log("[App] Inicialitzant visor:", containerId);
   window.initVisor3D(containerId, modelPath);
+
+  modelLoaded[targetId] = true;
 }
 
 // --------------------------------------------------------------------------
 // UI
 // --------------------------------------------------------------------------
 function toggleMode() { window.toggleVisorTheme?.(); }
+
 function toggleInfoPanel() {
   const panel = document.querySelector('#anfora .info-panel');
   panel?.classList.toggle('hidden');
 }
+
 function resetCamera() { window.resetCamera3D?.(); }
 
 // --------------------------------------------------------------------------
@@ -120,16 +134,12 @@ function toggleAudio() {
 // INICIALITZACIÓ GENERAL
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
+
   window.navigateTo = navigateTo;
   window.toggleMode = toggleMode;
   window.toggleInfoPanel = toggleInfoPanel;
   window.resetCamera = resetCamera;
   window.toggleAudio = toggleAudio;
-
-  // Evitar clics fantasma
-  document.querySelectorAll('.screen').forEach(screen => {
-    screen.addEventListener('click', e => e.stopPropagation());
-  });
 
   // Botó RA
   const startARBtn = document.getElementById('startARBtn');
