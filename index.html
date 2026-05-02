@@ -224,7 +224,7 @@
                     <span>~45 min</span>
                 </div>
 
-                <button class="explore-start-btn" onclick="navigateTo('visor')">
+                <button class="explore-start-btn" id="startARBtn">
                     START
                 </button>
             </div>
@@ -313,7 +313,7 @@
 
         <div id="d-container-ra"></div>
 
-        <button id="startARBtn" class="ra-start-btn">
+        <button id="startARBtnVisor" class="ra-start-btn">
             <span class="material-icons">view_in_ar</span>
         </button>
 
@@ -348,9 +348,11 @@
     </nav>
 
     <!-- ========================= SCRIPTS ========================= -->
+    <script src="js/ui-flow.js"></script>
     <script src="js/app.js"></script>
     <script type="module" src="js/visor3d.js"></script>
-    <script src="js/ui-flow.js"></script>
+
 
 </body>
+
 </html>
