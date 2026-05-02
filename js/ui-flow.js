@@ -82,19 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
     skipOnboardingBtn?.addEventListener("click", finalitzarOnboarding);
 
     // -----------------------------------------------------------
-    // 4. FINALITZAR ONBOARDING
+    // 4. FINALITZAR ONBOARDING 
     // -----------------------------------------------------------
     function finalitzarOnboarding() {
 
         localStorage.setItem("adarro_seen_onboarding", "true");
 
+        // Amagar onboarding SEMPRE
         onboarding.hidden = true;
+        onboarding.style.display = "none";
         onboarding.classList.remove("active");
 
-        if (window.navigateTo) {
+        // Només navegar si NO estem ja a HOME
+        if (window.activeScreen !== "home" && window.navigateTo) {
             window.navigateTo("home");
-        } else {
-            document.getElementById("home")?.classList.add("active");
         }
     }
 });
