@@ -1,74 +1,27 @@
 /* ======================================================== */
-/* 1. CONFIGURACIÓ GLOBAL (Colors i Fons)                   */
+/* 1. RESET I CONFIGURACIÓ GLOBAL                           */
 /* ======================================================== */
 
-/* Apliquem border-box perquè el padding no afecti l'amplada total */
 * {
   box-sizing: border-box;
-  max-width: 100%;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  /* Evitem el desplaçament horitzontal en mòbils */
   background-color: #F2E2C4;
-  /* Color sorra d'identitat arqueològica */
   font-family: sans-serif;
 }
 
 body {
-  /* Espai de seguretat inferior perquè la barra de navegació no tapi el contingut */
   padding-bottom: 80px;
-}
-
-
-
-#visor.screen {
-    padding: 0 !important;
-    min-height: 100vh !important;
-    height: 100vh !important;
-    width: 100vw !important;
-    position: relative !important;
-    overflow: hidden !important;
-}
-
-
-#anfora .info-panel {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  margin-top: 0;
-  background: rgba(252, 246, 234, 0.5);
-  /* Transparent */
-  backdrop-filter: blur(4px);
-  /* Efecte vidre bonic */
-  padding: 12px;
-  font-size: 0.85rem;
-}
-
-/* Definició de l'animació de lliscament vertical */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* ======================================================== */
 /* 2. TIPOGRAFIA                                            */
 /* ======================================================== */
 
-/* Títol principal de l'App: Ús de Serif per transmetre 
-   l'estètica clàssica i arqueològica del jaciment */
 .main-title {
   font-family: 'Playfair Display', serif;
   font-size: 3.3rem;
@@ -77,7 +30,6 @@ body {
   color: #222;
 }
 
-/* Subtítol de la capçalera: Manté la coherència amb el títol */
 .subtitle {
   font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
@@ -86,14 +38,12 @@ body {
   color: #0f0f0f;
 }
 
-/* Títols de les seccions internes (Context, Peça, etc.) */
 .section-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.4rem;
   margin-bottom: 12px;
 }
 
-/* Descripció secundària per als llistats d'objectes */
 .subtitle-objects {
   font-family: 'Playfair Display', serif;
   font-size: 1rem;
@@ -102,10 +52,10 @@ body {
   color: #666;
 }
 
-/* Jerarquia de capçaleres estàndard */
 h2 {
   font-size: 1.2em;
   margin: 0;
+  text-align: left;
 }
 
 h3 {
@@ -114,31 +64,59 @@ h3 {
   color: #333;
 }
 
-/* Estil per al cos de text: Optimitzat per a la lectura en mòbil 
-   amb un interlineat (line-height) del 1.4 */
 p {
   font-size: 0.95rem;
   line-height: 1.4;
   color: #555;
 }
 
-/* --------------------------------------------------------
-   ICONES DE GOOGLE (Material Symbols)
-   Configuració de la font d'icones per a la interfície (UI)
-   -------------------------------------------------------- */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
-  /* 'FILL' 1 activa el farcit de la icona per a un look més "app" */
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
   font-size: 30px;
 }
 
 /* ======================================================== */
-/* 3. HOME (BOTONS PRINCIPALS)                              */
+/* 3. PANTALLES (.screen)                                   */
 /* ======================================================== */
 
-/* Contenidor dels botons d'accés: Disposició vertical (stack)
-   amb una separació generosa per facilitar la interacció tàctil */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  padding: 20px;
+  overflow: hidden;
+}
+
+.screen.active {
+  display: block;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Pantalles especials */
+#anfora.screen.active {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#visor.screen.active {
+  display: block;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ======================================================== */
+/* 4. HOME                                                  */
+/* ======================================================== */
+
 .launcher-buttons {
   display: flex;
   flex-direction: column;
@@ -146,10 +124,6 @@ p {
   margin-top: 50px;
 }
 
-/* --------------------------------------------------------
-   LAUNCHER CARD (Targeta de llançament)
-   Disseny horitzontal: Icona a l'esquerra, text a la dreta
-   -------------------------------------------------------- */
 .launcher-card {
   width: 100%;
   display: flex;
@@ -157,63 +131,29 @@ p {
   gap: 20px;
   padding: 16px;
   border-radius: 30px;
-  /* Cantons molt arrodonits per a un look modern/app */
   border: 2px solid #333;
   background-color: #FCF6EA;
-  box-shadow: 0 3px 11px 0px #777;
-  /* Ombres per donar profunditat (elevació) */
+  box-shadow: 0 3px 11px #777;
   cursor: pointer;
-  text-align: left;
 }
 
-/* Contenidor de la icona/imatge del botó */
 .launcher-icon {
-  width: 80px;
+  width: 100px;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Ajust de la imatge dins la icona per evitar deformacions */
 .launcher-icon img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* Estil del text principal de la targeta */
-.launcher-text h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-
-/* --------------------------------------------------------
-   ANIMACIÓ DE TRANSICIÓ DE PANTALLES
-   Millora l'experiència d'usuari (UX) en fer els canvis fluids
-   -------------------------------------------------------- */
-.screen.active {
-  display: block;
-  animation: fadeIn 0.3s ease-in;
-}
-
-/* Definició de l'efecte d'aparició gradual (fade) */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 /* ======================================================== */
-/* 4. BARRA DE NAVEGACIÓ (BOTTOM NAV)                       */
+/* 5. BOTTOM NAV                                            */
 /* ======================================================== */
-/* Disseny ergonòmic Mobile-First: Situada a la part inferior 
-   per facilitar l'accés amb el polze, simulant una app nativa. */
 
 .bottom-nav {
   position: fixed;
@@ -223,16 +163,12 @@ p {
   height: 70px;
   display: flex;
   justify-content: space-around;
-  /* Distribució equitativa de les icones */
   align-items: center;
   background-color: #fff;
-  /* Ombra superior per separar visualment la nav del contingut */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.08);
   z-index: 100;
-  /* Ens assegurem que quedi sempre per sobre de l'escena 3D */
 }
 
-/* Estructura vertical: Icona a dalt i text a sota */
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -240,7 +176,6 @@ p {
   cursor: pointer;
 }
 
-/* Feedback visual: Color d'accent quan la secció està seleccionada */
 .nav-item.active {
   color: #cc7755;
 }
@@ -250,10 +185,8 @@ p {
 }
 
 /* ======================================================== */
-/* 5. CAPÇALERES DE SECCIÓ (BACK BUTTONS)                   */
+/* 6. CONTEXT                                               */
 /* ======================================================== */
-/* Botons de navegació inversa que permeten a l'usuari tornar 
-   fàcilment al menú principal des de Context o Peces. */
 
 .context-title-card,
 .pieces-title-card {
@@ -261,7 +194,6 @@ p {
   align-items: center;
   gap: 10px;
   border-radius: 40px;
-  /* Forma d'el·lipse/càpsula */
   border: 2px solid black;
   padding: 8px 15px;
   margin-bottom: 16px;
@@ -269,31 +201,20 @@ p {
   cursor: pointer;
 }
 
-/* ======================================================== */
-/* 6. CONTEXT HISTÒRIC I ACORDIÓ                            */
-/* ======================================================== */
-
-/* Contenidor de la imatge de capçalera de la secció */
 .context-hero {
   width: 100%;
   height: 200px;
-  /* Alçada fixa per mantenir la jerarquia visual en dispositius mòbils */
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 16px;
 }
 
-/* Ajust de la imatge: 'cover' assegura que s'ompli l'espai sense deformar-se */
 .context-hero img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* --------------------------------------------------------
-   AUDIO CARD
-   Interfície per a la reproducció de l'audioguia
-   -------------------------------------------------------- */
 .audio-card {
   display: flex;
   align-items: center;
@@ -305,11 +226,6 @@ p {
   margin-bottom: 20px;
 }
 
-.audio-card h3 {
-  margin: 0px;
-}
-
-/* Estil del botó de Play (botó transparent per a la icona) */
 .play-btn {
   background: none;
   border: none;
@@ -320,15 +236,10 @@ p {
   font-size: 3rem;
 }
 
-/* --------------------------------------------------------
-   SISTEMA D'ACORDIÓ
-   Optimització de l'espai per a continguts textuals extensos
-   -------------------------------------------------------- */
 .context-block {
   border-bottom: 1px solid black;
 }
 
-/* Capçalera interactiva de cada bloc de l'acordió */
 .context-header {
   display: flex;
   justify-content: space-between;
@@ -337,41 +248,27 @@ p {
   cursor: pointer;
 }
 
-.context-header h3 {
-  margin: 0px;
-}
-
-/* Contingut ocult per defecte: es gestiona amb max-height 
-   per permetre una animació suau de transició (transition) */
 .context-content {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.35s ease;
 }
 
-/* Quan el bloc té la classe 'open' (via JS), el contingut es desplega */
 .context-block.active .context-content {
-  max-height: 400px;
-  /* Alçada màxima suficient per al text */
+  max-height: 600px;
   padding-bottom: 14px;
 }
 
 /* ======================================================== */
-/* 7. COL·LECCIÓ DE PECES (LLISTAT VERTICAL)                */
+/* 7. PECES                                                 */
 /* ======================================================== */
 
-/* Contenidor de la llista: Organitzat en columna per a una 
-   lectura de scroll vertical infinita en dispositius mòbils */
 .pieces-card-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* --------------------------------------------------------
-   PIECES CARD (Targeta d'objecte)
-   Disseny vertical: Imatge a dalt i botó a sota
-   -------------------------------------------------------- */
 .pieces-card {
   display: flex;
   flex-direction: column;
@@ -384,16 +281,12 @@ p {
   cursor: pointer;
 }
 
-/* Visor d'imatge de la peça: 'contain' evita que les fotos
-   dels objectes arqueològics es retallin */
 .pieces-card-image {
   width: 100%;
   height: 160px;
   object-fit: contain;
 }
 
-/* Botó de detalls: Ocupa tota l'amplada de la targeta per 
-   maximitzar l'àrea d'interacció (hit area) */
 .details-btn {
   width: 100%;
   background: #fff;
@@ -406,39 +299,29 @@ p {
 }
 
 /* ======================================================== */
-/* 8. EXPLORAR (RA CARD I MAPA DE FONS)                     */
+/* 8. EXPLORAR                                              */
 /* ======================================================== */
 
-/* Configuració de la secció per permetre el posicionament 
-   absolut de la imatge de fons i els elements flotants */
 #explorar.active {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  /* Situa la UI a la part inferior per ergonomia */
   padding: 20px;
   position: relative;
   overflow: hidden;
   min-height: calc(100vh - 80px);
 }
 
-/* Imatge de fons del jaciment: Ocupa tot el visor (Hero section) */
 .explore-hero {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
+  inset: 0;
   background-image: url('../assets/img/jaciment.jpg');
   background-size: cover;
   background-position: center;
-  z-index: 0;
-  /* El filtre sepia dóna un aspecte atemporal i facilita 
-     la llegibilitat de la interfície blanca al damunt */
   filter: sepia(20%) hue-rotate(-10deg) saturate(120%);
+  z-index: 0;
 }
 
-/* Capçalera flotant: Indica la ubicació dins del jaciment */
 .explore-title-card {
   position: absolute;
   top: 20px;
@@ -452,75 +335,11 @@ p {
   padding: 8px 15px;
   background-color: #FCF6EA;
   cursor: pointer;
-  z-index: 1;
 }
 
-
-/* ========================= PANTALLES ========================= */
-
-/* Totes les pantalles ocultes per defecte */
-.screen {
-  display: none !important;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: auto;
-}
-
-/* Només la pantalla activa es mostra */
-.screen.active {
-  display: block !important;
-}
-
-/* Pantalla ANFORA ocupa tota la pantalla */
-#anfora.screen.active {
-  display: flex !important;
-  flex-direction: column;
-  height: 100vh;
-}
-
-/* Pantalla VISOR RA ocupa tota la pantalla */
-#visor.screen.active {
-  display: block !important;
-  padding: 0 !important;
-  height: 100vh !important;
-  width: 100vw !important;
-  overflow: hidden !important;
-}
-
-/* ========================= VISOR 3D ========================= */
-
-.visor-wrapper {
-  flex: 1;
-  width: 100%;
-  position: relative;
-  background: #e6e6e6;
-  overflow: visible;
-}
-
-#d-container-piece,
-#d-container-ra {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  background: #e6e6e6;
-  z-index: 1;
-}
-
-.hidden {
-  display: none !important;
-}
-
-
-/* --------------------------------------------------------
-   EXPLORE CARD (Interfície de Realitat Augmentada)
-   Simula la finestra d'escaneig o inici de la RA
-   -------------------------------------------------------- */
 .explore-card {
   position: relative;
   background-color: rgba(252, 246, 234, 0.9);
-  /* Transparència per veure el fons */
   border: 2px solid #333;
   border-radius: 30px;
   padding: 16px;
@@ -530,8 +349,6 @@ p {
   z-index: 10;
 }
 
-
-/* Divisió de contingut: Esquerra (Text/Acció) vs Dreta (Info/Imatge) */
 .explore-left {
   display: flex;
   flex-direction: column;
@@ -545,7 +362,6 @@ p {
   padding-left: 10px;
 }
 
-/* Botó de crida a l'acció (CTA): Color invers per destacar */
 .explore-start-btn {
   background: #333;
   color: #fff;
@@ -557,101 +373,39 @@ p {
 }
 
 /* ======================================================== */
-/* 9. VISOR 3D I REALITAT AUGMENTADA                        */
+/* 9. VISOR 3D I RA                                         */
 /* ======================================================== */
 
-/* Contenidor a pantalla completa per a l'experiència de RA */
-.ra-screen {
-  position: relative;
+.visor-wrapper {
+  flex: 1;
   width: 100%;
-  height: 80vh;
-  background: black;
-  /* Fons fosc per evitar centellejos mentre carrega la càmera */
-  overflow: hidden;
+  position: relative;
+  background: #e6e6e6;
 }
 
-#ar-view {
+#d-container-piece,
+#d-container-ra {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  background: #e6e6e6;
+  z-index: 1;
 }
-
-/* Botó de retorn específic per a la interfície de RA */
-.ra-back-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  /* Semitransparent per no tapar la visió de la càmera */
-  color: #fff;
-  border: 2px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.ra-start-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: white;
-  border-radius: 50%;
-  width: 58px;
-  height: 58px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  border: none;
-  cursor: pointer;
-  z-index: 20;
-}
-
-.ra-start-btn .material-icons {
-  font-size: 32px;
-  color: #333;
-}
-
-/* --------------------------------------------------------
-   VISOR D'OBJECTE INDIVIDUAL (Detall de Peça)
-   -------------------------------------------------------- */
-
-
-#anfora.screen {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-}
-
-
-
-
-
-/* Pantalles per defecte */
-.screen {
-    display: none;
-    padding: 20px;
-    min-height: calc(100vh - 80px);
-}
-
-/* Pantalla activa */
-.screen.active {
-    display: block !important;
-}
-
-
-
-
-
 
 canvas {
   display: block;
 }
 
-
+.visor-controls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 .visor-controls button {
   width: 45px;
@@ -665,8 +419,77 @@ canvas {
   justify-content: center;
 }
 
+.info-panel {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: rgba(252, 246, 234, 0.5);
+  backdrop-filter: blur(4px);
+  padding: 12px;
+  font-size: 0.85rem;
+  z-index: 10;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* RA SCREEN */
+.ra-screen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  overflow: hidden;
+}
+
+.ra-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.ra-start-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  border-radius: 50%;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.visually-hidden {
+  position:absolute;
+  width:1px;
+  height:1px;
+  margin:-1px;
+  padding:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  border:0;
+}
+
 /* ======================================================== */
-/* 10. SPLASH SCREEN (Pantalla de càrrega)                  */
+/* 10. SPLASH                                               */
 /* ======================================================== */
 
 .splash-screen {
@@ -675,7 +498,7 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(242, 226, 196, 0.98), rgba(242, 226, 196, 0.95));
+  background: linear-gradient(180deg, rgba(242,226,196,0.98), rgba(242,226,196,0.95));
   z-index: 2000;
   padding: 20px;
 }
@@ -684,20 +507,18 @@ canvas {
   text-align: center;
   max-width: 520px;
   width: calc(100% - 40px);
-  background: rgba(252, 246, 234, 0.95);
+  background: rgba(252,246,234,0.95);
   border-radius: 20px;
   padding: 28px;
   border: 2px solid #333;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
 .splash-logo {
   width: 120px;
-  height: auto;
   margin-bottom: 12px;
 }
 
-/* Barra de progrés de càrrega dels assets 3D */
 .splash-progress {
   width: 100%;
   height: 10px;
@@ -711,12 +532,11 @@ canvas {
   height: 100%;
   background: linear-gradient(90deg, #b36a4c, #8a4f3a);
   width: 0%;
-  /* Es controla via JS durant la càrrega */
   transition: width 300ms ease;
 }
 
 /* ======================================================== */
-/* 11. ONBOARDING (Tutorial d'inici)                        */
+/* 11. ONBOARDING                                           */
 /* ======================================================== */
 
 .onboarding-screen {
@@ -734,7 +554,7 @@ canvas {
   width: calc(100% - 40px);
   border-radius: 20px;
   padding: 22px;
-  background: rgba(252, 246, 234, 0.98);
+  background: rgba(252,246,234,0.98);
   border: 2px solid #333;
 }
 
@@ -744,16 +564,6 @@ canvas {
   color: #333;
 }
 
-#splash,
-#onboarding {
-  display: none !important;
-  pointer-events: none !important;
-  opacity: 0 !important;
-}
-.onboarding-steps li {
-  margin-bottom: 12px;
-}
-
 .onboarding-actions {
   display: flex;
   gap: 12px;
@@ -761,14 +571,12 @@ canvas {
 }
 
 /* ======================================================== */
-/* 12. HUD (Heads-Up Display)                               */
+/* 12. HUD (només RA)                                       */
 /* ======================================================== */
-/* Capa d'interfície tècnica que flota sobre el mapa o RA */
 
 .hud {
   position: fixed;
   inset: 0;
-  /* El HUD és transparent als clics per defecte per poder moure el 3D */
   pointer-events: none;
   z-index: 1500;
   display: none;
@@ -777,7 +585,6 @@ canvas {
   padding: 12px;
 }
 
-/* Reactivem els clics només per als elements interactius (botons) */
 .hud * {
   pointer-events: auto;
 }
@@ -787,36 +594,21 @@ canvas {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
-  background: rgba(252, 246, 234, 0.6);
+  background: rgba(252,246,234,0.6);
   padding: 8px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0,0,0,0.12);
   backdrop-filter: blur(6px);
-  /* Efecte modern de desenfocament de fons */
-}
-
-.hud-title {
-  font-weight: 600;
-  color: #3a2b24;
-}
-
-.hud-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8vh;
-  pointer-events: none;
-  /* L'indicador central no ha d'interferir amb els gestos */
 }
 
 .hud-bottom {
   display: flex;
   justify-content: space-around;
   gap: 12px;
-  background: rgba(252, 246, 234, 0.85);
+  background: rgba(252,246,234,0.85);
   padding: 10px;
   border-radius: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0,0,0,0.12);
 }
 
 .hud-btn,
@@ -830,36 +622,12 @@ canvas {
   cursor: pointer;
 }
 
-/* Petit node visual per a microinteraccions (punts d'interès) */
-.decision-node {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #b36a4c;
-  color: #fff;
-  font-size: 0.75rem;
-  margin-left: 8px;
-}
-
 /* ======================================================== */
-/* 13. RESPONSIVE TWEAKS (Ajustos de pantalla)              */
+/* 13. RESPONSIVE                                           */
 /* ======================================================== */
 
 @media (max-width: 480px) {
-
-  /* Reducció de paddings per a telèfons amb pantalles molt petites */
-  .splash-inner {
-    padding: 18px;
-  }
-
-  .onboarding-inner {
-    padding: 16px;
-  }
-
-  .hud-bottom {
-    padding: 8px;
-  }
+  .splash-inner { padding: 18px; }
+  .onboarding-inner { padding: 16px; }
+  .hud-bottom { padding: 8px; }
 }
