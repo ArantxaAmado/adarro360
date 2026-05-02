@@ -31,6 +31,9 @@ function navigateTo(targetId) {
   // Destruir visor només si cal
   if (activeScreen === 'anfora' || activeScreen === 'visor') {
     if (window.disposeVisor3D) window.disposeVisor3D();
+
+    //RESET DEL MODEL CARREGAT
+    modelLoaded[activeScreen] = false;
   }
 
   // Ocultar totes les pantalles
