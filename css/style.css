@@ -82,6 +82,7 @@ p {
 
 .screen {
   display: none;
+  position: relative;
   width: 100%;
   min-height: calc(100vh - 80px);
   padding: 20px;
@@ -102,7 +103,7 @@ p {
 #anfora.screen.active {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 80vh;
 }
 
 #visor.screen.active {
@@ -111,6 +112,16 @@ p {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+}
+
+#visor.screen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 /* ======================================================== */
@@ -420,17 +431,22 @@ canvas {
 }
 
 .info-panel {
-  position: relative;
-  background: rgba(252, 246, 234, 0.5);
-  backdrop-filter: blur(4px);
-  padding: 12px;
-  font-size: 0.85rem;
-  z-index: 10;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(252, 246, 234, 0.65);
+    backdrop-filter: blur(6px);
+    padding: 16px;
+    font-size: 0.9rem;
+    z-index: 20;
+    border-top: 1px solid rgba(0,0,0,0.2);
 }
 
 .hidden {
   display: none !important;
 }
+
 
 /* RA SCREEN */
 .ra-screen {
@@ -575,6 +591,8 @@ canvas {
   justify-content: center;  
   margin-top: 10px;
 }
+
+
 
 /* ======================================================== */
 /* 12. HUD (només RA)                                       */
