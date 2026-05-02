@@ -420,10 +420,7 @@ canvas {
 }
 
 .info-panel {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
+  position: relative;
   background: rgba(252, 246, 234, 0.5);
   backdrop-filter: blur(4px);
   padding: 12px;
@@ -535,7 +532,7 @@ canvas {
   transition: width 300ms ease;
 }
 
-/* ======================================================== */
+/*/* ======================================================== */
 /* 11. ONBOARDING                                           */
 /* ======================================================== */
 
@@ -543,31 +540,40 @@ canvas {
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center;      
+  justify-content: center; 
   z-index: 1900;
   padding: 20px;
+  background: rgba(0,0,0,0.15); 
+  backdrop-filter: blur(4px);
 }
 
 .onboarding-inner {
-  max-width: 720px;
-  width: calc(100% - 40px);
-  border-radius: 20px;
-  padding: 22px;
+  width: 100%;
+  max-width: 420px;         
+  min-height: 60vh;        
   background: rgba(252,246,234,0.98);
   border: 2px solid #333;
+  border-radius: 24px;
+  padding: 28px;            
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  gap: 20px;
 }
 
 .onboarding-steps {
-  margin: 12px 0 18px;
+  margin: 0;
   padding-left: 18px;
   color: #333;
+  line-height: 1.5;
 }
 
 .onboarding-actions {
   display: flex;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: center;  
+  margin-top: 10px;
 }
 
 /* ======================================================== */
