@@ -2,7 +2,9 @@
   "name": "Adarró 360",
   "short_name": "Adarró 360",
   "description": "Exploració interactiva del jaciment ibèric de Darró i les seves peces.",
-  "start_url": "index.html",
+
+  "start_url": "/adarro360/",
+  "scope": "/adarro360/",
   "display": "standalone",
 
   "background_color": "#f8f0e3",
