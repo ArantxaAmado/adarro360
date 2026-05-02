@@ -28,8 +28,13 @@ let isARMode = false;
 // ==========================================================================
 
 window.initVisor3D = function (containerId, modelPath) {
+
+  // Protecció extra
   const container = document.getElementById(containerId);
-  if (!container) return;
+  if (!container || !modelPath) {
+    console.warn("[Visor] Falta container o modelPath:", containerId, modelPath);
+    return;
+  }
 
   // Fallback de mida per evitar 0×0
   let width = container.clientWidth;
@@ -125,7 +130,7 @@ function loadModel(modelPath, forAR) {
     (gltf) => {
       const model = gltf.scene;
 
-      // 🔥 Escala base per evitar bounding box = 0
+      // Escala base per evitar bounding box = 0
       model.scale.set(1, 1, 1);
 
       if (forAR) {
@@ -142,7 +147,7 @@ function loadModel(modelPath, forAR) {
       const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
 
-      // 🔥 Si el model és massa petit → escala-lo
+      // Si el model és massa petit → escala-lo
       const maxDim = Math.max(size.x, size.y, size.z);
       if (maxDim < 0.1) {
         model.scale.set(10, 10, 10);
@@ -178,8 +183,6 @@ function loadModel(modelPath, forAR) {
     }
   );
 }
-
-
 
 // ==========================================================================
 // MODE AR – CONFIGURACIÓ
