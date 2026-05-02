@@ -86,16 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // -----------------------------------------------------------
     function finalitzarOnboarding() {
 
-        localStorage.setItem("adarro_seen_onboarding", "true");
+    localStorage.setItem("adarro_seen_onboarding", "true");
 
-        // Amagar onboarding SEMPRE
-        onboarding.hidden = true;
-        onboarding.style.display = "none";
-        onboarding.classList.remove("active");
+    onboarding.hidden = true;
+    onboarding.style.display = "none";
+    onboarding.classList.remove("active");
 
-        // Només navegar si NO estem ja a HOME
-        if (window.activeScreen !== "home" && window.navigateTo) {
-            window.navigateTo("home");
-        }
-    }
+    // Navegar sempre a HOME, sense condicions
+    window.navigateTo?.("home");
+}
+
 });

@@ -1,5 +1,5 @@
 // ==========================================================================
-// VISOR 3D + RA – VERSIÓ ESTABLE
+// VISOR 3D + RA – VERSIÓ ESTABLE (AR immediata davant de la càmera)
 // ==========================================================================
 
 import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
@@ -18,8 +18,6 @@ let resizeHandler = null;
 // AR
 let xrSession = null;
 let xrRefSpace = null;
-let hitTestSource = null;
-let reticle = null;
 let arModel = null;
 let isARMode = false;
 
@@ -35,14 +33,8 @@ window.initVisor3D = function (containerId, modelPath) {
     return;
   }
 
-  let width = container.clientWidth;
-  let height = container.clientHeight;
-
-  if (width === 0 || height === 0) {
-    width = 300;
-    height = 300;
-    console.warn('[Visor] Contenidor sense mida, inicialitzant amb 300x300 i confiant en el resize.');
-  }
+  let width = container.clientWidth || 300;
+  let height = container.clientHeight || 300;
 
   if (renderer) window.disposeVisor3D();
 
@@ -70,13 +62,13 @@ window.initVisor3D = function (containerId, modelPath) {
   if (containerId === 'd-container-ra') {
     isARMode = true;
     renderer.xr.enabled = true;
-
-    // En AR, millor fons transparent
     scene.background = null;
 
     setupARSceneLights();
-    setupReticle();
-    // El model AR es carrega DESPRÉS d'iniciar la sessió AR
+
+    // Fallback: si AR no arrenca, almenys es veu en 3D
+    loadModel(modelPath, false);
+    startNormalLoop();
   }
 
   resizeHandler = () => {
@@ -133,9 +125,9 @@ function loadModel(modelPath, forAR) {
       if (forAR) {
         arModel = model;
 
-        // PREVIEW AR: mostra la vila davant de la càmera encara que no hi hagi hit-test
+        // AR immediata: 2 metres davant de la càmera
         arModel.visible = true;
-        arModel.position.set(0, 0, -2); // 2 metres davant de la càmera
+        arModel.position.set(0, 0, -2);
         arModel.rotation.set(0, 0, 0);
 
         scene.add(arModel);
@@ -193,25 +185,13 @@ function setupARSceneLights() {
   scene.add(new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1));
 }
 
-function setupReticle() {
-  const geometry = new THREE.RingGeometry(0.15, 0.2, 32).rotateX(-Math.PI / 2);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    opacity: 0.6,
-    transparent: true
-  });
-
-  reticle = new THREE.Mesh(geometry, material);
-  reticle.matrixAutoUpdate = false;
-  reticle.visible = false;
-  scene.add(reticle);
-}
-
 // ==========================================================================
-// INICIAR SESSIÓ AR
+// INICIAR SESSIÓ AR (AR immediata)
 // ==========================================================================
 
 window.startARSession = async function () {
+  console.log("[AR] Iniciant sessió AR…");
+
   if (!navigator.xr) {
     alert('Aquest dispositiu/navegador no suporta WebXR.');
     return;
@@ -225,25 +205,15 @@ window.startARSession = async function () {
     }
 
     xrSession = await navigator.xr.requestSession('immersive-ar', {
-      requiredFeatures: ['hit-test', 'local-floor']
+      requiredFeatures: ['local-floor']
     });
 
     renderer.xr.setSession(xrSession);
 
     xrRefSpace = await xrSession.requestReferenceSpace('local-floor');
 
-    const viewerSpace = await xrSession.requestReferenceSpace('viewer');
-    hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
-
-    // Carreguem la vila en mode AR (ara es veurà davant de la càmera)
+    // Carreguem la vila en mode AR immediat
     loadModel('assets/models/villa_darro.glb', true);
-
-    xrSession.addEventListener('select', () => {
-      if (reticle.visible && arModel) {
-        arModel.position.setFromMatrixPosition(reticle.matrix);
-        arModel.visible = true;
-      }
-    });
 
     renderer.setAnimationLoop(renderAR);
 
@@ -258,25 +228,6 @@ window.startARSession = async function () {
 // ==========================================================================
 
 function renderAR(timestamp, frame) {
-  if (!frame || !xrRefSpace || !hitTestSource) {
-    renderer.render(scene, camera);
-    return;
-  }
-
-  const hitTestResults = frame.getHitTestResults(hitTestSource);
-
-  if (hitTestResults.length > 0) {
-    const hit = hitTestResults[0];
-    const pose = hit.getPose(xrRefSpace);
-
-    if (pose && reticle) {
-      reticle.visible = true;
-      reticle.matrix.fromArray(pose.transform.matrix);
-    }
-  } else if (reticle) {
-    reticle.visible = false;
-  }
-
   renderer.render(scene, camera);
 }
 
@@ -338,6 +289,5 @@ window.disposeVisor3D = function () {
   camera = null;
   controls = null;
   arModel = null;
-  reticle = null;
   isARMode = false;
 };

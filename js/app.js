@@ -152,11 +152,20 @@ document.addEventListener('DOMContentLoaded', () => {
   window.resetCamera = resetCamera;
   window.toggleAudio = toggleAudio;
 
-  // Botó RA
+  // Botó RA de la pantalla EXPLORAR
   const startARBtn = document.getElementById('startARBtn');
   if (startARBtn) {
     startARBtn.addEventListener('click', async () => {
       navigateTo('visor');
+      await waitForContainerSize(document.getElementById('d-container-ra'));
+      window.startARSession?.();
+    });
+  }
+
+  // Botó RA de la pantalla VISOR (NOU)
+  const startARBtnVisor = document.getElementById('startARBtnVisor');
+  if (startARBtnVisor) {
+    startARBtnVisor.addEventListener('click', async () => {
       await waitForContainerSize(document.getElementById('d-container-ra'));
       window.startARSession?.();
     });
