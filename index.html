@@ -15,68 +15,55 @@
 </head>
 
 <body>
-    <!-- SPLASH SCREEN -->
-    <section id="splash" class="screen splash-screen" role="dialog" aria-labelledby="splash-title"
-        aria-describedby="splash-desc">
+
+    <!-- ========================= SPLASH ========================= -->
+    <section id="splash" class="splash-screen">
         <div class="splash-inner">
             <img src="assets/img/logo-adarro360.png" alt="Logotip Adarró 360" class="splash-logo">
-            <h1 id="splash-title" class="main-title">Adarró 360</h1>
-            <p id="splash-desc" class="subtitle">Finestra al passat · Carregant recursos...</p>
-            <div class="splash-progress" aria-hidden="true">
-                <div class="splash-progress-bar" id="splashProgressBar" style="width:0%"></div>
+            <h1 class="main-title">Adarró 360</h1>
+            <p class="subtitle">Finestra al passat · Carregant recursos...</p>
+
+            <div class="splash-progress">
+                <div class="splash-progress-bar" id="splashProgressBar"></div>
             </div>
-            <button id="enterBtn" class="explore-start-btn" aria-label="Entrar a l'aplicació">Entrar</button>
+
+            <button id="enterBtn" class="explore-start-btn">Entrar</button>
         </div>
     </section>
 
-    <!-- ONBOARDING -->
-    <section id="onboarding" class="screen onboarding-screen" role="dialog" aria-labelledby="onboarding-title"
-        aria-describedby="onboarding-desc" aria-modal="true" hidden>
+    <!-- ========================= ONBOARDING ========================= -->
+    <section id="onboarding" class="onboarding-screen" hidden>
         <div class="onboarding-inner info-panel">
-            <h2 id="onboarding-title" class="section-title">Benvinguda a Adarró 360</h2>
-            <p id="onboarding-desc">Per a una experiència òptima, concedeix accés a la càmera i segueix les instruccions
-                per escanejar el terra del jaciment.</p>
+            <h2 class="section-title">Benvinguda a Adarró 360</h2>
+            <p>Per a una experiència òptima, concedeix accés a la càmera i segueix les instruccions.</p>
 
             <ol class="onboarding-steps">
-                <li>
-                    <strong>Permisos de càmera</strong>
-                    <p>Prem el botó i accepta l'accés a la càmera quan el navegador ho demani.</p>
-                </li>
-                <li>
-                    <strong>Moviment de calibratge</strong>
-                    <p>Mou el dispositiu lentament en forma de L i mantén-lo a uns 30–50 cm del terra per detectar la
-                        superfície.</p>
-                </li>
-                <li>
-                    <strong>Indicadors visuals</strong>
-                    <p>Quan aparegui el marc verd, toca per fixar el punt i iniciar l'exploració.</p>
-                </li>
+                <li><strong>Permisos de càmera</strong> — Accepta l'accés quan el navegador ho demani.</li>
+                <li><strong>Moviment de calibratge</strong> — Mou el dispositiu lentament en forma de L.</li>
+                <li><strong>Indicadors visuals</strong> — Quan aparegui el marc verd, toca per iniciar.</li>
             </ol>
 
             <div class="onboarding-actions">
-                <button id="requestCameraBtn" class="details-btn" aria-label="Concedir permisos de càmera">Concedir
-                    permisos</button>
-                <button id="skipOnboardingBtn" class="details-btn" aria-label="Saltar onboarding">Saltar</button>
+                <button id="requestCameraBtn" class="details-btn">Concedir permisos</button>
+                <button id="skipOnboardingBtn" class="details-btn">Saltar</button>
             </div>
         </div>
     </section>
 
-    <!-- HUD / Capa de Context -->
-    <div id="hud" class="hud" aria-hidden="true">
+    <!-- ========================= HUD (només RA) ========================= -->
+    <div id="hud" class="hud">
         <div class="hud-top">
-            <button id="hud-back" class="hud-btn" aria-label="Tornar">⟵</button>
+            <button id="hud-back" class="hud-btn">⟵</button>
             <div class="hud-title">Adarró 360</div>
-            <button id="hud-help" class="hud-btn" aria-label="Ajuda">?</button>
+            <button id="hud-help" class="hud-btn">?</button>
         </div>
 
-        <div class="hud-center" id="hudCenter">
-            <!-- POI quick info placeholder -->
-        </div>
+        <div class="hud-center" id="hudCenter"></div>
 
         <div class="hud-bottom">
-            <button id="mapBtn" class="hud-action" aria-label="Mapa">Mapa</button>
-            <button id="raBtn" class="hud-action" aria-label="Iniciar Realitat Augmentada">RA</button>
-            <button id="collectionBtn" class="hud-action" aria-label="Col·lecció">Col·lecció</button>
+            <button id="mapBtn" class="hud-action">Mapa</button>
+            <button id="raBtn" class="hud-action">RA</button>
+            <button id="collectionBtn" class="hud-action">Col·lecció</button>
         </div>
     </div>
 
@@ -90,44 +77,44 @@
 
         <div class="launcher-buttons">
 
-            <!-- EXPLORAR JACIMENT -->
-            <a class="launcher-card" onclick="navigateTo('explorar')">
+            <!-- EXPLORAR -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
                 <span class="launcher-icon">
                     <img src="assets/icon/camera_ra.png" alt="RA">
                 </span>
                 <div class="launcher-text">
                     <h2>EXPLORA EL JACIMENT (RA)</h2>
                 </div>
-            </a>
+            </div>
 
-            <!-- CONTEXT HISTÒRIC -->
-            <a class="launcher-card" onclick="navigateTo('context')">
+            <!-- CONTEXT -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('context')">
                 <span class="launcher-icon">
                     <img src="assets/icon/context.png" alt="Context">
                 </span>
                 <div class="launcher-text">
                     <h2>CONTEXT HISTÒRIC</h2>
                 </div>
-            </a>
+            </div>
 
-            <!-- COL·LECCIÓ DE PECES -->
-            <a class="launcher-card" onclick="navigateTo('peces')">
+            <!-- PECES -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('peces')">
                 <span class="launcher-icon">
                     <img src="assets/icon/peces.png" alt="Peces">
                 </span>
                 <div class="launcher-text">
                     <h2>COL·LECCIÓ DE PECES</h2>
                 </div>
-            </a>
+            </div>
 
         </div>
 
     </section>
 
-    <!-- ========================= CONTEXT HISTÒRIC ========================= -->
+    <!-- ========================= CONTEXT ========================= -->
     <section id="context" class="screen">
 
-        <div class="context-title-card" onclick="navigateTo('home')">
+        <div class="context-title-card" role="button" tabindex="0" onclick="navigateTo('home')">
             <span class="material-icons">arrow_back</span>
             <h2>CONTEXT HISTÒRIC</h2>
         </div>
@@ -146,20 +133,14 @@
             </div>
         </div>
 
-        <!-- Blocs de continguts -->
+        <!-- Acordions -->
         <div class="context-block">
             <div class="context-header" onclick="toggleContext(this)">
                 <h3>Una cruïlla de cultures</h3>
                 <span class="material-icons arrow">expand_more</span>
             </div>
             <div class="context-content">
-                <p>El jaciment de Darró no és només un punt en el mapa, sinó un autèntic llibre obert sobre més de 1.000
-                    anys d’història a la vora de la Mediterrània. Situat en un lloc estratègic entre el promontori de
-                    Sant Gervasi i la desembocadura d’un antic torrent, aquest espai va ser durant segles un punt de
-                    trobada on van confluir diverses civilitzacions. Des dels primers pobladors ibers fins a la
-                    transformació en una vil·la romana i la seva posterior etapa visigòtica, Darró ha estat una cruïlla
-                    on el comerç marítim i l'intercanvi cultural amb fenicis, grecs i cartaginesos van forjar la
-                    identitat d’aquest territori molt abans de la fundació de la Vilanova actual.</p>
+                <p>El jaciment de Darró no és només un punt en el mapa...</p>
             </div>
         </div>
 
@@ -169,13 +150,7 @@
                 <span class="material-icons arrow">expand_more</span>
             </div>
             <div class="context-content">
-                <p>Cap a l'any 550 a.C., la tribu ibèrica dels cossetans va triar el turó de Sant Gervasi per establir
-                    el seu primer assentament. Aquest poble, que possiblement anomenava el lloc Arró o Darró, es va
-                    convertir en un centre econòmic clau de la regió de la Cosetània. Amb el temps, el poblat va créixer
-                    cap a la plana, on es va desenvolupar un important barri industrial. Les excavacions han revelat
-                    cases alineades en carrers ben traçats i, sobretot, una intensa activitat metal·lúrgica al "barri
-                    dels ferrers", així com tallers ceràmics on es fabricaven àmfores per comerciar amb els cartaginesos
-                    de les illes Pitiüses.</p>
+                <p>Cap a l'any 550 a.C., la tribu ibèrica dels cossetans...</p>
             </div>
         </div>
 
@@ -185,15 +160,7 @@
                 <span class="material-icons arrow">expand_more</span>
             </div>
             <div class="context-content">
-                <p>El jaciment es transforma amb l’arribada de Roma, integrant-se en les rutes comercials
-                    mediterrànies.Amb l’arribada de Roma cap a l'any 50 a.C., l'antic poblat ibèric va ser substituït
-                    per una luxosa vil·la romana vinculada al territori de Tàrraco. Aquesta explotació agrària i
-                    residencial va viure el seu màxim esplendor entre els segles I i IV d.C.. La vil·la es dividia en
-                    dues zones clarament diferenciades: la pars urbana, una residència senyorial amb jardins, rics
-                    mosaics i sales nobles decorades amb capitells corintis, i la pars fructuaria, dedicada a la
-                    producció de vi i oli i a l'emmagatzematge de productes agrícoles. Va ser una època de gran
-                    activitat econòmica que va deixar una empremta monumental al paisatge litoral.
-                </p>
+                <p>El jaciment es transforma amb l’arribada de Roma...</p>
             </div>
         </div>
 
@@ -203,13 +170,7 @@
                 <span class="material-icons arrow">expand_more</span>
             </div>
             <div class="context-content">
-                <p>Actualment, el Conjunt Arqueològic de Darró és un espai patrimonial viu que permet viatjar en el
-                    temps des del passeig de Ribes Roges. Gràcies a les excavacions iniciades als anys 50 i continuades
-                    pel Servei de Patrimoni Arquitectònic Local (SPAL) de la Diputació de Barcelona, avui es poden
-                    visitar els vestigis consolidats del barri ibèric i de la residència romana. El jaciment s’ha
-                    convertit en un museu a l’aire lliure on la recerca científica i la restauració treballen de la mà
-                    per preservar aquest llegat i oferir als visitants una finestra directa al passat mil·lenari de la
-                    ciutat.</p>
+                <p>Actualment, el Conjunt Arqueològic de Darró és un espai patrimonial viu...</p>
             </div>
         </div>
 
@@ -218,7 +179,7 @@
     <!-- ========================= EXPLORAR ========================= -->
     <section id="explorar" class="screen">
 
-        <div class="explore-title-card" onclick="navigateTo('home')">
+        <div class="explore-title-card" role="button" tabindex="0" onclick="navigateTo('home')">
             <span class="material-icons">arrow_back</span>
             <h2>EXPLORAR EL JACIMENT</h2>
         </div>
@@ -229,9 +190,7 @@
 
             <div class="explore-left">
                 <div class="meta-item">
-                    <span class="material-symbols-outlined">
-                        accessibility
-                    </span>
+                    <span class="material-symbols-outlined">accessibility</span>
                     <span>Principiant</span>
                 </div>
 
@@ -247,19 +206,17 @@
 
             <div class="explore-right">
                 <h3 class="explore-title">Jaciment d’Adarró</h3>
-                <p class="explore-desc">
-                    Recorre el jaciment in situ i activa punts d’interès amb la càmera AR.
-                </p>
+                <p class="explore-desc">Recorre el jaciment in situ i activa punts d’interès amb la càmera AR.</p>
             </div>
 
         </div>
 
     </section>
 
-    <!-- ========================= COL·LECCIÓ DE PECES ========================= -->
+    <!-- ========================= PECES ========================= -->
     <section id="peces" class="screen">
 
-        <div class="pieces-title-card" onclick="navigateTo('home')">
+        <div class="pieces-title-card" role="button" tabindex="0" onclick="navigateTo('home')">
             <span class="material-icons">arrow_back</span>
             <h2>COL·LECCIÓ DE PECES</h2>
         </div>
@@ -273,7 +230,7 @@
                 <div class="pieces-card-content">
                     <h3 class="card-title">Ànfora ibèrica</h3>
                 </div>
-                <button class="details-btn">DETALLS</button>
+                <button class="details-btn" onclick="event.stopPropagation(); navigateTo('anfora')">DETALLS</button>
             </article>
 
             <article class="pieces-card">
@@ -291,19 +248,15 @@
     <!-- ========================= FITXA PEÇA ========================= -->
     <section id="anfora" class="screen">
 
-        <!-- PESTANYA SUPERIOR (igual estil que les altres) -->
-        <div class="pieces-title-card" onclick="navigateTo('peces')">
+        <div class="pieces-title-card" role="button" tabindex="0" onclick="navigateTo('peces')">
             <span class="material-icons">arrow_back</span>
             <h2>ÀNFORA IBÈRICA</h2>
         </div>
 
-        <!-- VISOR 3D DE LA PEÇA -->
         <div class="visor-wrapper">
 
-            <!-- MODEL 3D -->
             <div id="d-container-piece"></div>
 
-            <!-- BOTONS SUPERIORS ESQUERRA -->
             <div class="visor-controls">
                 <button id="mode-button" onclick="toggleMode()">
                     <span class="material-icons">dark_mode</span>
@@ -318,21 +271,23 @@
                 </button>
             </div>
 
-            <!-- PANELL D’INFORMACIÓ DE LA PEÇA -->
             <div class="info-panel hidden">
                 <h3>Informació de la peça</h3>
                 <p><strong>Funció:</strong> Emmagatzematge i transport marítim de líquids.</p>
-                <p><strong>Relleu arqueològic:</strong> Evidència del comerç mediterrani i connexions amb pobles púnics
-                    i romans.</p>
+                <p><strong>Relleu arqueològic:</strong> Evidència del comerç mediterrani.</p>
             </div>
 
         </div>
 
     </section>
 
-    <!-- ========================= VISOR JACIMENT ========================= -->
+    <!-- ========================= RA VISOR ========================= -->
     <section id="visor" class="screen ra-screen">
+
+        <h2 class="visually-hidden">Visor RA</h2>
+
         <div id="d-container-ra"></div>
+
         <button id="startARBtn" class="ra-start-btn">
             <span class="material-icons">view_in_ar</span>
         </button>
@@ -346,18 +301,17 @@
     <!-- ========================= AJUDA ========================= -->
     <section id="ajuda" class="screen">
         <h2 class="section-title">Ajuda</h2>
-        <p>Aquí trobaràs informació sobre com utilitzar l’aplicació, activar la RA i navegar pel jaciment.</p>
+        <p>Aquí trobaràs informació sobre com utilitzar l’aplicació.</p>
     </section>
 
     <!-- ========================= NAV BOTTOM ========================= -->
     <nav class="bottom-nav">
-
         <div class="nav-item" onclick="navigateTo('home')">
             <span class="material-symbols-outlined">home</span>
             <span class="nav-label">HOME</span>
         </div>
 
-        <div class="nav-item" onclick="navigateTo('visor')">
+        <div class="nav-item" onclick="navigateTo('explorar')">
             <span class="material-symbols-outlined">photo_camera</span>
             <span class="nav-label">RA</span>
         </div>
@@ -366,17 +320,12 @@
             <span class="material-symbols-outlined">help</span>
             <span class="nav-label">AJUDA</span>
         </div>
-
     </nav>
 
+    <!-- ========================= SCRIPTS ========================= -->
     <script src="js/app.js"></script>
     <script type="module" src="js/visor3d.js"></script>
-
     <script src="js/ui-flow.js"></script>
 
-
-
-
 </body>
-
 </html>
