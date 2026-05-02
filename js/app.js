@@ -134,6 +134,14 @@ function toggleAudio() {
 }
 
 // --------------------------------------------------------------------------
+// DESPLEGABLES CONTEXT HISTÒRIC
+// --------------------------------------------------------------------------
+function toggleContext(header) {
+  const block = header.parentElement;
+  block.classList.toggle("active");
+}
+
+// --------------------------------------------------------------------------
 // INICIALITZACIÓ GENERAL
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
