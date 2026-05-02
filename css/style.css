@@ -64,7 +64,7 @@ h3 {
   color: #333;
 }
 
-p {
+p, ul {
   font-size: 0.95rem;
   line-height: 1.4;
   color: #555;
