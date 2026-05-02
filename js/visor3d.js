@@ -29,14 +29,12 @@ let isARMode = false;
 
 window.initVisor3D = function (containerId, modelPath) {
 
-  // Protecció extra
   const container = document.getElementById(containerId);
   if (!container || !modelPath) {
     console.warn("[Visor] Falta container o modelPath:", containerId, modelPath);
     return;
   }
 
-  // Fallback de mida per evitar 0×0
   let width = container.clientWidth;
   let height = container.clientHeight;
 
@@ -46,10 +44,8 @@ window.initVisor3D = function (containerId, modelPath) {
     console.warn('[Visor] Contenidor sense mida, inicialitzant amb 300x300 i confiant en el resize.');
   }
 
-  // Si ja hi havia un visor → neteja
   if (renderer) window.disposeVisor3D();
 
-  // Escena i renderer
   scene = new THREE.Scene();
   scene.background = new THREE.Color(isDarkMode ? 0x1a1a1a : 0xeeeeee);
 
@@ -75,12 +71,14 @@ window.initVisor3D = function (containerId, modelPath) {
     isARMode = true;
     renderer.xr.enabled = true;
 
+    // En AR, millor fons transparent
+    scene.background = null;
+
     setupARSceneLights();
     setupReticle();
     // El model AR es carrega DESPRÉS d'iniciar la sessió AR
   }
 
-  // Resize
   resizeHandler = () => {
     const w = container.clientWidth;
     const h = container.clientHeight;
@@ -130,30 +128,31 @@ function loadModel(modelPath, forAR) {
     (gltf) => {
       const model = gltf.scene;
 
-      // Escala base per evitar bounding box = 0
       model.scale.set(1, 1, 1);
 
       if (forAR) {
         arModel = model;
-        arModel.visible = false;
+
+        // PREVIEW AR: mostra la vila davant de la càmera encara que no hi hagi hit-test
+        arModel.visible = true;
+        arModel.position.set(0, 0, -2); // 2 metres davant de la càmera
+        arModel.rotation.set(0, 0, 0);
+
         scene.add(arModel);
         return;
       }
 
       scene.add(model);
 
-      // Bounding box
       const box = new THREE.Box3().setFromObject(model);
       const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
 
-      // Si el model és massa petit → escala-lo
       const maxDim = Math.max(size.x, size.y, size.z);
       if (maxDim < 0.1) {
         model.scale.set(10, 10, 10);
       }
 
-      // Recalcular bounding box després d'escalar
       const box2 = new THREE.Box3().setFromObject(model);
       const center2 = box2.getCenter(new THREE.Vector3());
       const size2 = box2.getSize(new THREE.Vector3());
@@ -174,8 +173,10 @@ function loadModel(modelPath, forAR) {
       initialCameraPosition = camera.position.clone();
       initialControlsTarget = new THREE.Vector3(0, 0, 0);
 
-      controls.target.set(0, 0, 0);
-      controls.update();
+      if (controls) {
+        controls.target.set(0, 0, 0);
+        controls.update();
+      }
     },
     undefined,
     (error) => {
@@ -234,6 +235,7 @@ window.startARSession = async function () {
     const viewerSpace = await xrSession.requestReferenceSpace('viewer');
     hitTestSource = await xrSession.requestHitTestSource({ space: viewerSpace });
 
+    // Carreguem la vila en mode AR (ara es veurà davant de la càmera)
     loadModel('assets/models/villa_darro.glb', true);
 
     xrSession.addEventListener('select', () => {
