@@ -91,12 +91,12 @@ function init3DForScreen(targetId) {
 
   if (targetId === 'anfora') {
     containerId = 'd-container-piece';
-    modelPath = 'adarro360/assets/models/anfora.glb';
+    modelPath = '/adarro360/assets/models/anfora.glb';
   }
 
   if (targetId === 'visor') {
     containerId = 'd-container-ra';
-    modelPath = 'adarro360/assets/models/villa_darro.glb';
+    modelPath = '/adarro360/assets/models/villa_darro.glb';
   }
 
   console.log("[App] Inicialitzant visor:", containerId);
