@@ -28,7 +28,7 @@ const urlsToCache = [
   BASE + 'assets/models/villa_darro.glb',
 
   // IMATGES
-  BASE + 'assets/img/context_hero.jpeg',
+  BASE + 'assets/img/context_hero.jpg',
   BASE + 'assets/img/amphora.png',
   BASE + 'assets/img/coins.png',
   BASE + 'assets/img/jaciment.jpg'
