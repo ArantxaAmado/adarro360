@@ -91,12 +91,12 @@ function init3DForScreen(targetId) {
 
   if (targetId === 'anfora') {
     containerId = 'd-container-piece';
-    modelPath = 'assets/models/anfora.glb';
+    modelPath = 'adarro360/assets/models/anfora.glb';
   }
 
   if (targetId === 'visor') {
     containerId = 'd-container-ra';
-    modelPath = 'assets/models/villa_darro.glb';
+    modelPath = 'adarro360/assets/models/villa_darro.glb';
   }
 
   console.log("[App] Inicialitzant visor:", containerId);
@@ -121,7 +121,7 @@ function resetCamera() { window.resetCamera3D?.(); }
 // AUDIO
 // --------------------------------------------------------------------------
 function toggleAudio() {
-  if (!currentAudio) currentAudio = new Audio('assets/audio/historia_darro.mp3');
+  if (!currentAudio) currentAudio = new Audio('/adarro360/assets/audio/historia_darro.mp3');
   const icon = document.querySelector('.play-btn span');
 
   if (currentAudio.paused) {
