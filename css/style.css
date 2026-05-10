@@ -64,11 +64,13 @@ h3 {
   color: #333;
 }
 
-p, ul {
+p, ul{
   font-size: 0.95rem;
   line-height: 1.4;
   color: #555;
 }
+
+
 
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -435,7 +437,7 @@ canvas {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(252, 246, 234, 0.65);
+    background: rgba(252, 246, 234, 0.651);
     backdrop-filter: blur(6px);
     padding: 16px;
     font-size: 0.9rem;
@@ -500,6 +502,7 @@ canvas {
   clip:rect(0 0 0 0);
   border:0;
 }
+
 
 /* ======================================================== */
 /* 10. SPLASH                                               */
