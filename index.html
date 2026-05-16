@@ -5,12 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Informació bàsica -->
+    <meta name="author" content="Aranzazu Amado Barjola — TFG Adarró360">
+    <meta name="description"
+        content="Adarró360 és una experiència immersiva que permet explorar la vila romana d’Adarró en 3D i realitat augmentada.">
+    <meta name="keywords"
+        content="Adarró, arqueologia, RA, AR, vila romana, patrimoni, Vilanova i la Geltrú, TFG, immersiu">
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/adarro360/assets/icon/icon-192.png">
 
     <!-- Manifest PWA -->
     <link rel="manifest" href="/adarro360/manifest.json">
     <meta name="theme-color" content="#cc7755">
+
+    <!-- iOS PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/adarro360/assets/icon/icon-192.png">
+
+    <!-- AR Quick Look (iOS) -->
+    <link rel="ar" href="assets/models/villa_darro.usdz">
+
+    <!-- OpenGraph (per compartir a xarxes) -->
+    <meta property="og:title" content="Adarró360 – Finestra al passat">
+    <meta property="og:description" content="Explora la vila romana d’Adarró en 3D i realitat augmentada.">
+    <meta property="og:image" content="/adarro360/assets/icon/icon-512.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://">
 
     <!-- Fonts i icones -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -20,6 +42,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <title>ADARRÓ360 – Finestra al passat</title>
+
 </head>
 
 
@@ -86,13 +109,24 @@
 
         <div class="launcher-buttons">
 
+            <!-- AR -->
+            <div class="launcher-card" role="button" tabindex="0" id="arLauncher">
+                <span class="launcher-icon">
+                    <img src="assets/icon/ar.png" alt="AR">
+                </span>
+                <div class="launcher-text">
+                    <h2>VEURE EN AR</h2>
+                </div>
+            </div>
+
+
             <!-- EXPLORAR -->
             <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
                 <span class="launcher-icon">
-                    <img src="assets/icon/camera_ra.png" alt="RA">
+                    <img src="assets/icon/explora.png" alt="Explora">
                 </span>
                 <div class="launcher-text">
-                    <h2>EXPLORA EL JACIMENT (RA)</h2>
+                    <h2>EXPLORA EL JACIMENT</h2>
                 </div>
             </div>
 
@@ -333,9 +367,13 @@
     </section>
 
     <!-- ========================= AJUDA ========================= -->
-    <section id="ajuda" class="screen ajuda-screen">
 
-        <h2 class="section-title">Ajuda</h2>
+
+    <section id="ajuda" class="screen ajuda-screen">
+        <div class="context-title-card" role="button" tabindex="0" onclick="navigateTo('home')">
+            <span class="material-icons">arrow_back</span>
+            <h2>AJUDA</h2>
+        </div>
 
         <div class="ajuda-content">
 
@@ -396,9 +434,17 @@
     </nav>
 
     <!-- ========================= SCRIPTS ========================= -->
+    <!-- Scripts generals -->
     <script src="js/ui-flow.js"></script>
     <script src="js/app.js"></script>
     <script type="module" src="js/visor3d.js"></script>
+
+    <!-- Scripts AR -->
+    <script src="js/ar-ios.js"></script>
+    <script src="js/ar-android.js"></script>
+    <script src="js/ar-detect.js"></script>
+
+
 
 
 </body>
