@@ -1,8 +1,8 @@
 // ==========================================================================
-// APP.JS 
+// APP.JS
 // ==========================================================================
 
-let activeScreen = 'home';
+let activeScreen = null;
 let currentAudio = null;
 
 let modelLoaded = {
@@ -39,11 +39,17 @@ function navigateTo(targetId) {
   // Ocultar totes les pantalles
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-  // Mostrar pantalla objectiu
+  // Mostrar pantalla objectiu (comprovació de seguretat)
   const targetScreen = document.getElementById(targetId);
+  if (!targetScreen) {
+    console.error("navigateTo: pantalla no trobada:", targetId);
+    return;
+  }
   targetScreen.classList.add('active');
 
   activeScreen = targetId;
+  // sincronitzar amb window per a depuració externa
+  window.activeScreen = activeScreen;
 
   // IMPORTANT: Reaplicar les traduccions quan canviem de pantalla
   if (window.applyTranslations) applyTranslations();
@@ -67,6 +73,12 @@ function waitForContainerSize(container, timeout = 3000) {
     const start = performance.now();
 
     function check() {
+      if (!container) {
+        // si no existeix el contenidor, resolem per evitar bloqueig
+        resolve();
+        return;
+      }
+
       if (container.clientWidth > 0 && container.clientHeight > 0) {
         resolve();
       } else if (performance.now() - start > timeout) {
@@ -94,16 +106,16 @@ function init3DForScreen(targetId) {
 
   if (targetId === 'anfora') {
     containerId = 'd-container-piece';
-    modelPath = './assets/models/anfora.glb';   
+    modelPath = './assets/models/anfora.glb';
   }
 
   if (targetId === 'visor') {
     containerId = 'd-container-ra';
-    modelPath = './assets/models/villa_darro.glb';  
+    modelPath = './assets/models/villa_darro.glb';
   }
 
   console.log("[App] Inicialitzant visor:", containerId);
-  window.initVisor3D(containerId, modelPath);
+  window.initVisor3D?.(containerId, modelPath);
 
   modelLoaded[targetId] = true;
 }
@@ -124,15 +136,15 @@ function resetCamera() { window.resetCamera3D?.(); }
 // AUDIO
 // --------------------------------------------------------------------------
 function toggleAudio() {
-  if (!currentAudio) currentAudio = new Audio('./assets/audio/historia_darro.mp3'); 
+  if (!currentAudio) currentAudio = new Audio('./assets/audio/historia_darro.mp3');
   const icon = document.querySelector('.play-btn span');
 
   if (currentAudio.paused) {
     currentAudio.play();
-    icon.textContent = 'pause_circle';
+    if (icon) icon.textContent = 'pause_circle';
   } else {
     currentAudio.pause();
-    icon.textContent = 'play_circle';
+    if (icon) icon.textContent = 'play_circle';
   }
 }
 
@@ -149,11 +161,24 @@ function toggleContext(header) {
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Exposar funcions globals que altres scripts (i18n) necessiten
   window.navigateTo = navigateTo;
   window.toggleMode = toggleMode;
   window.toggleInfoPanel = toggleInfoPanel;
   window.resetCamera = resetCamera;
   window.toggleAudio = toggleAudio;
+
+  // sincronitzar variable global per a depuració
+  window.activeScreen = activeScreen;
+
+  // Cridar initLanguage només si està disponible (i18n.js s'ha de carregar després)
+  if (window.initLanguage) {
+    try {
+      window.initLanguage();
+    } catch (e) {
+      console.error("Error en initLanguage():", e);
+    }
+  }
 
   // Botó RA de la pantalla EXPLORAR
   const startARBtn = document.getElementById('startARBtn');

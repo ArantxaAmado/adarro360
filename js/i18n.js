@@ -7,6 +7,7 @@ let i18nStrings = {};
 async function loadLanguage(lang) {
     try {
         const res = await fetch(`./i18n/${lang}.json`);
+        if (!res.ok) throw new Error("No s'ha pogut carregar el fitxer: " + res.status);
         i18nStrings = await res.json();
         currentLang = lang;
 
@@ -23,7 +24,7 @@ async function loadLanguage(lang) {
 function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (i18nStrings[key]) {
+        if (i18nStrings && i18nStrings[key]) {
             el.textContent = i18nStrings[key];
         }
     });
@@ -32,13 +33,23 @@ function applyTranslations() {
 // --------------------------------------------------------------------------
 // SELECCIONAR IDIOMA (pantalla inicial)
 // --------------------------------------------------------------------------
-function selectLanguage(lang) {
-    loadLanguage(lang);
+async function selectLanguage(lang) {
+    // Esperem que es carregui l'arxiu abans de navegar per assegurar traduccions
+    await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    navigateTo("home");
-}
+    // Marcar que l'onboarding ja s'ha vist? (no ho fem aquí per defecte)
+    // localStorage.setItem("adarro_seen_onboarding", "1");
 
+    // Navegar a home (navigateTo està exposada per app.js)
+    if (typeof navigateTo === 'function') {
+        navigateTo("home");
+    } else if (window.navigateTo) {
+        window.navigateTo("home");
+    } else {
+        console.warn("selectLanguage: navigateTo no està disponible encara.");
+    }
+}
 
 // --------------------------------------------------------------------------
 // INICIALITZACIÓ D'IDIOMA
@@ -47,12 +58,24 @@ function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
 
     if (saved) {
+        // Si ja hi ha idioma guardat, carreguem i anem a home
         loadLanguage(saved);
-        navigateTo("home");
+        if (typeof navigateTo === 'function') {
+            navigateTo("home");
+        } else if (window.navigateTo) {
+            window.navigateTo("home");
+        }
     } else {
-        navigateTo("screen-language");
+        // Si no hi ha idioma, mostrar pantalla d'idioma
+        if (typeof navigateTo === 'function') {
+            navigateTo("screen-language");
+        } else if (window.navigateTo) {
+            window.navigateTo("screen-language");
+        } else {
+            console.warn("initLanguage: navigateTo no està disponible encara.");
+        }
     }
 }
 
-
-document.addEventListener("DOMContentLoaded", initLanguage);
+// Exposar initLanguage perquè app.js la cridi quan navigateTo ja existeixi
+window.initLanguage = initLanguage;
