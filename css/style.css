@@ -503,9 +503,43 @@ canvas {
   border:0;
 }
 
+/* ======================================================== */
+/* 10. PANTALLA IDIOMA                                      */
+/* ======================================================== */
+
+#screen-language {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f2f2e9;
+}
+
+.lang-box {
+    text-align: center;
+    padding: 20px;
+}
+
+.lang-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.lang-buttons button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
 
 /* ======================================================== */
-/* 10. SPLASH                                               */
+/* 11. SPLASH                                               */
 /* ======================================================== */
 
 .splash-screen {
@@ -552,7 +586,7 @@ canvas {
 }
 
 /*/* ======================================================== */
-/* 11. ONBOARDING                                           */
+/* 12. ONBOARDING                                           */
 /* ======================================================== */
 
 .onboarding-screen {
@@ -598,7 +632,7 @@ canvas {
 
 
 /* ======================================================== */
-/* 12. HUD                                                  */
+/* 13. HUD                                                  */
 /* ======================================================== */
 
 .hud {
@@ -649,33 +683,9 @@ canvas {
   cursor: pointer;
 }
 
-.language-selector-hud {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    margin-left: 8px;
-}
-
-.lang-btn-hud {
-    background: #ffffff20;
-    border: 1px solid #ffffff40;
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: 0.2s;
-}
-
-.lang-btn-hud:hover {
-    background: #ffffff40;
-}
-
 
 /* ======================================================== */
-/* 13. RESPONSIVE                                           */
+/* 14. RESPONSIVE                                           */
 /* ======================================================== */
 
 @media (max-width: 480px) {
