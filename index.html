@@ -48,6 +48,20 @@
 
 <body>
 
+    <!-- ========================= PANTALLA IDIOMA ========================= -->
+<div id="screen-language" class="screen active">
+    <div class="lang-box">
+        <h2>Selecciona l'idioma</h2>
+
+        <div class="lang-buttons">
+            <button onclick="selectLanguage('ca')">Català</button>
+            <button onclick="selectLanguage('es')">Español</button>
+            <button onclick="selectLanguage('en')">English</button>
+        </div>
+    </div>
+</div>
+
+
     <!-- ========================= SPLASH ========================= -->
     <section id="splash" class="splash-screen">
         <div class="splash-inner">
@@ -87,30 +101,23 @@
 
 
     <!-- ========================= HUD (només RA) ========================= -->
-<div id="hud" class="hud">
-    <div class="hud-top">
-        <button id="hud-back" class="hud-btn" data-i18n="hud_back"></button>
+    <div id="hud" class="hud">
+        <div class="hud-top">
+            <button id="hud-back" class="hud-btn" data-i18n="hud_back"></button>
 
-        <div class="hud-title" data-i18n="app_title"></div>
+            <div class="hud-title" data-i18n="app_title"></div>
 
-        <button id="hud-help" class="hud-btn" data-i18n="hud_help"></button>
+            <button id="hud-help" class="hud-btn" data-i18n="hud_help"></button>
+        </div>
 
-        <!-- SELECTOR D’IDIOMA -->
-        <div class="language-selector-hud">
-            <button class="lang-btn-hud" onclick="loadLanguage('ca')">CA</button>
-            <button class="lang-btn-hud" onclick="loadLanguage('es')">ES</button>
-            <button class="lang-btn-hud" onclick="loadLanguage('en')">EN</button>
+        <div class="hud-center" id="hudCenter"></div>
+
+        <div class="hud-bottom">
+            <button id="mapBtn" class="hud-action" data-i18n="hud_map"></button>
+            <button id="raBtn" class="hud-action" data-i18n="hud_ar"></button>
+            <button id="collectionBtn" class="hud-action" data-i18n="hud_collection"></button>
         </div>
     </div>
-
-    <div class="hud-center" id="hudCenter"></div>
-
-    <div class="hud-bottom">
-        <button id="mapBtn" class="hud-action" data-i18n="hud_map"></button>
-        <button id="raBtn" class="hud-action" data-i18n="hud_ar"></button>
-        <button id="collectionBtn" class="hud-action" data-i18n="hud_collection"></button>
-    </div>
-</div>
 
 
     <!-- ========================= HOME ========================= -->
