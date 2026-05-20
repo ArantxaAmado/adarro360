@@ -1,5 +1,5 @@
 // ==========================================================================
-// APP.JS – Versió optimitzada i estable
+// APP.JS 
 // ==========================================================================
 
 let activeScreen = 'home';
@@ -32,7 +32,7 @@ function navigateTo(targetId) {
   if (activeScreen === 'anfora' || activeScreen === 'visor') {
     if (window.disposeVisor3D) window.disposeVisor3D();
 
-    //RESET DEL MODEL CARREGAT
+    // RESET DEL MODEL CARREGAT
     modelLoaded[activeScreen] = false;
   }
 
@@ -44,6 +44,9 @@ function navigateTo(targetId) {
   targetScreen.classList.add('active');
 
   activeScreen = targetId;
+
+  // IMPORTANT: Reaplicar les traduccions quan canviem de pantalla
+  if (window.applyTranslations) applyTranslations();
 
   // Inicialitzar visor 3D si cal
   if (targetId === 'anfora' || targetId === 'visor') {
@@ -91,12 +94,12 @@ function init3DForScreen(targetId) {
 
   if (targetId === 'anfora') {
     containerId = 'd-container-piece';
-    modelPath = '/adarro360/assets/models/anfora.glb';
+    modelPath = './assets/models/anfora.glb';   
   }
 
   if (targetId === 'visor') {
     containerId = 'd-container-ra';
-    modelPath = '/adarro360/assets/models/villa_darro.glb';
+    modelPath = './assets/models/villa_darro.glb';  
   }
 
   console.log("[App] Inicialitzant visor:", containerId);
@@ -121,7 +124,7 @@ function resetCamera() { window.resetCamera3D?.(); }
 // AUDIO
 // --------------------------------------------------------------------------
 function toggleAudio() {
-  if (!currentAudio) currentAudio = new Audio('/adarro360/assets/audio/historia_darro.mp3');
+  if (!currentAudio) currentAudio = new Audio('./assets/audio/historia_darro.mp3'); 
   const icon = document.querySelector('.play-btn span');
 
   if (currentAudio.paused) {
@@ -162,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Botó RA de la pantalla VISOR (NOU)
+  // Botó RA de la pantalla VISOR
   const startARBtnVisor = document.getElementById('startARBtnVisor');
   if (startARBtnVisor) {
     startARBtnVisor.addEventListener('click', async () => {
