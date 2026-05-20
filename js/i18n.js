@@ -36,10 +36,9 @@ function selectLanguage(lang) {
     loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    // Amagar pantalla d'idioma i anar a HOME
-    document.getElementById("screen-language").classList.remove("active");
     navigateTo("home");
 }
+
 
 // --------------------------------------------------------------------------
 // INICIALITZACIÓ D'IDIOMA
@@ -48,13 +47,12 @@ function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
 
     if (saved) {
-        // L’usuari ja va triar idioma → carregar-lo i anar a HOME
         loadLanguage(saved);
         navigateTo("home");
     } else {
-        // Primera vegada → mostrar pantalla d’idioma
         navigateTo("screen-language");
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", initLanguage);
