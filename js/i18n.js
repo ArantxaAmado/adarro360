@@ -3,7 +3,7 @@ let i18nStrings = {};
 
 async function loadLanguage(lang) {
     try {
-        const res = await fetch(`/i18n/${lang}.json`);
+        const res = await fetch(`./i18n/${lang}.json`);
         i18nStrings = await res.json();
         currentLang = lang;
 
