@@ -598,7 +598,7 @@ canvas {
 
 
 /* ======================================================== */
-/* 12. HUD (només RA)                                       */
+/* 12. HUD                                                  */
 /* ======================================================== */
 
 .hud {
@@ -648,6 +648,31 @@ canvas {
   font-weight: 600;
   cursor: pointer;
 }
+
+.language-selector-hud {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.lang-btn-hud {
+    background: #ffffff20;
+    border: 1px solid #ffffff40;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: 0.2s;
+}
+
+.lang-btn-hud:hover {
+    background: #ffffff40;
+}
+
 
 /* ======================================================== */
 /* 13. RESPONSIVE                                           */
