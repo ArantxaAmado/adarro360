@@ -1,0 +1,96 @@
+{
+  "app_title": "Adarró 360",
+  "splash_loading": "Window to the past · Loading resources...",
+  "btn_enter": "Enter",
+
+  "onboarding_title": "Welcome to Adarró 360",
+  "onboarding_intro": "For the best experience, allow camera access and follow the instructions.",
+
+  "onb_step1_title": "Camera permissions",
+  "onb_step1_desc": "Grant access when the browser requests it.",
+  "onb_step2_title": "Calibration movement",
+  "onb_step2_desc": "Move the device slowly in an L shape.",
+  "onb_step3_title": "Visual indicators",
+  "onb_step3_desc": "When the green frame appears, tap to start.",
+
+  "btn_grant_permissions": "Grant permissions",
+  "btn_skip": "Skip",
+
+  "hud_back": "Back",
+  "hud_help": "Help",
+  "hud_map": "Map",
+  "hud_ar": "AR",
+  "hud_collection": "Collection",
+
+  "home_title": "ADARRÓ360",
+  "home_subtitle": "Window to the past",
+  "home_ar": "VIEW IN AR",
+  "home_explore": "EXPLORE THE SITE",
+  "home_context": "HISTORICAL CONTEXT",
+  "home_collection": "OBJECT COLLECTION",
+
+  "context_title": "HISTORICAL CONTEXT",
+  "context_audio_title": "Listen to the narrated story",
+  "context_audio_duration": "Duration: 2:00 minutes",
+
+  "context_block1_title": "A crossroads of cultures",
+  "context_block1_text": "The Darró site is not just a point on the map, but an open book spanning over 1,000 years of history...",
+
+  "context_block2_title": "The arrival of the Iberians (Cossetans)",
+  "context_block2_text": "Around 550 BC, the Iberian tribe of the Cossetans chose the hill of Sant Gervasi...",
+
+  "context_block3_title": "Roman splendour",
+  "context_block3_text": "With the arrival of Rome around 50 BC, the ancient Iberian settlement was replaced by a luxurious Roman villa...",
+
+  "context_block4_title": "The site today",
+  "context_block4_text": "Today, the archaeological complex of Darró is a living heritage space...",
+
+  "explore_title": "EXPLORE THE SITE",
+  "explore_level": "Beginner",
+  "explore_duration": "~45 min",
+  "explore_start": "Start",
+  "explore_site_title": "Adarró Archaeological Site",
+  "explore_site_desc": "Walk through the site and activate points of interest using the AR camera.",
+
+  "pieces_title": "OBJECT COLLECTION",
+  "pieces_subtitle": "Discover some of the most significant objects found at Adarró.",
+
+  "piece1_title": "Iberian amphora",
+  "piece2_title": "Roman coin",
+  "btn_details": "DETAILS",
+
+  "piece_info_title": "Object information",
+  "piece_info_function_label": "Function:",
+  "piece_info_function": "Storage and maritime transport of liquids.",
+  "piece_info_relevance_label": "Archaeological relevance:",
+  "piece_info_relevance": "Evidence of Mediterranean trade.",
+
+  "ra_viewer_title": "AR Viewer",
+
+  "help_title": "HELP",
+  "help_how_title": "How does the app work?",
+  "help_how_text": "This app lets you explore archaeological objects in 3D and view a reconstruction in AR.",
+
+  "help_3d_title": "Explore the amphora in 3D",
+  "help_drag": "Drag to rotate the object.",
+  "help_zoom": "Zoom with two fingers or the mouse wheel.",
+  "help_info": "Tap the “i” to view historical information.",
+
+  "help_ar_title": "View the villa in AR",
+  "help_ar_step1": "Press the “AR” button to activate the camera.",
+  "help_ar_step2": "The villa will appear 2 meters in front of you.",
+  "help_ar_step3": "Turn or move to observe it from different angles.",
+  "help_ar_step4": "If the device does not support AR, it will be shown in 3D.",
+
+  "help_nav_title": "Navigation",
+  "help_nav_home": "Press “Home” to return to the main screen.",
+  "help_nav_explore": "Press “Explore” to view the objects and the villa.",
+  "help_nav_help": "Press “Help” to return to this screen.",
+
+  "help_compat_title": "Compatibility",
+  "help_compat_text": "AR only works on devices compatible with WebXR.",
+
+  "nav_home": "HOME",
+  "nav_ar": "AR",
+  "nav_help": "HELP"
+}

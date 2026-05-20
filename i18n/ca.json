@@ -1,0 +1,96 @@
+{
+  "app_title": "Adarró 360",
+  "splash_loading": "Finestra al passat · Carregant recursos...",
+  "btn_enter": "Entrar",
+
+  "onboarding_title": "Benvinguda a Adarró 360",
+  "onboarding_intro": "Per a una experiència òptima, concedeix accés a la càmera i segueix les instruccions.",
+
+  "onb_step1_title": "Permisos de càmera",
+  "onb_step1_desc": "Accepta l'accés quan el navegador ho demani.",
+  "onb_step2_title": "Moviment de calibratge",
+  "onb_step2_desc": "Mou el dispositiu lentament en forma de L.",
+  "onb_step3_title": "Indicadors visuals",
+  "onb_step3_desc": "Quan aparegui el marc verd, toca per iniciar.",
+
+  "btn_grant_permissions": "Concedir permisos",
+  "btn_skip": "Saltar",
+
+  "hud_back": "Enrere",
+  "hud_help": "Ajuda",
+  "hud_map": "Mapa",
+  "hud_ar": "RA",
+  "hud_collection": "Col·lecció",
+
+  "home_title": "ADARRÓ360",
+  "home_subtitle": "Finestra al passat",
+  "home_ar": "VEURE EN AR",
+  "home_explore": "EXPLORA EL JACIMENT",
+  "home_context": "CONTEXT HISTÒRIC",
+  "home_collection": "COL·LECCIÓ DE PECES",
+
+  "context_title": "CONTEXT HISTÒRIC",
+  "context_audio_title": "Escolta la història narrada",
+  "context_audio_duration": "Durada: 2:00 minuts",
+
+  "context_block1_title": "Una cruïlla de cultures",
+  "context_block1_text": "El jaciment de Darró no és només un punt en el mapa, sinó un autèntic llibre obert sobre més de 1.000 anys d’història...",
+
+  "context_block2_title": "L’arribada dels ibers (cossetans)",
+  "context_block2_text": "Cap a l'any 550 a.C., la tribu ibèrica dels cossetans va triar el turó de Sant Gervasi...",
+
+  "context_block3_title": "L’esplendor romà",
+  "context_block3_text": "Amb l’arribada de Roma cap a l'any 50 a.C., l'antic poblat ibèric va ser substituït per una luxosa vil·la romana...",
+
+  "context_block4_title": "El jaciment avui",
+  "context_block4_text": "Actualment, el Conjunt Arqueològic de Darró és un espai patrimonial viu que permet viatjar en el temps...",
+
+  "explore_title": "EXPLORAR EL JACIMENT",
+  "explore_level": "Principiant",
+  "explore_duration": "~45 min",
+  "explore_start": "Començar",
+  "explore_site_title": "Jaciment d’Adarró",
+  "explore_site_desc": "Recorre el jaciment in situ i activa punts d’interès amb la càmera AR.",
+
+  "pieces_title": "COL·LECCIÓ DE PECES",
+  "pieces_subtitle": "Descobreix alguns dels objectes més significatius trobats a Adarró.",
+
+  "piece1_title": "Ànfora ibèrica",
+  "piece2_title": "Moneda romana",
+  "btn_details": "DETALLS",
+
+  "piece_info_title": "Informació de la peça",
+  "piece_info_function_label": "Funció:",
+  "piece_info_function": "Emmagatzematge i transport marítim de líquids.",
+  "piece_info_relevance_label": "Relleu arqueològic:",
+  "piece_info_relevance": "Evidència del comerç mediterrani.",
+
+  "ra_viewer_title": "Visor RA",
+
+  "help_title": "AJUDA",
+  "help_how_title": "Com funciona l’aplicació?",
+  "help_how_text": "Aquesta aplicació et permet explorar peces arqueològiques en 3D i visualitzar una reconstrucció en RA.",
+
+  "help_3d_title": "Explorar l’ànfora en 3D",
+  "help_drag": "Arrossega per girar la peça.",
+  "help_zoom": "Fes zoom amb dos dits o la roda del ratolí.",
+  "help_info": "Toca la “i” per veure informació històrica.",
+
+  "help_ar_title": "Veure la vila en RA",
+  "help_ar_step1": "Prem el botó “RA” per activar la càmera.",
+  "help_ar_step2": "La vila apareixerà a 2 metres davant teu.",
+  "help_ar_step3": "Gira’t o mou-te per observar-la.",
+  "help_ar_step4": "Si el dispositiu no suporta RA, es mostrarà en 3D.",
+
+  "help_nav_title": "Navegació",
+  "help_nav_home": "Prem “Inici” per tornar a la pantalla principal.",
+  "help_nav_explore": "Prem “Explorar” per veure les peces i la vila.",
+  "help_nav_help": "Prem “Ajuda” per tornar a aquesta pantalla.",
+
+  "help_compat_title": "Compatibilitat",
+  "help_compat_text": "La RA només funciona en dispositius compatibles amb WebXR.",
+
+  "nav_home": "INICI",
+  "nav_ar": "RA",
+  "nav_help": "AJUDA"
+}

@@ -1,0 +1,96 @@
+{
+  "app_title": "Adarró 360",
+  "splash_loading": "Ventana al pasado · Cargando recursos...",
+  "btn_enter": "Entrar",
+
+  "onboarding_title": "Bienvenida a Adarró 360",
+  "onboarding_intro": "Para una experiencia óptima, concede acceso a la cámara y sigue las instrucciones.",
+
+  "onb_step1_title": "Permisos de cámara",
+  "onb_step1_desc": "Acepta el acceso cuando el navegador lo solicite.",
+  "onb_step2_title": "Movimiento de calibración",
+  "onb_step2_desc": "Mueve el dispositivo lentamente en forma de L.",
+  "onb_step3_title": "Indicadores visuales",
+  "onb_step3_desc": "Cuando aparezca el marco verde, toca para iniciar.",
+
+  "btn_grant_permissions": "Conceder permisos",
+  "btn_skip": "Saltar",
+
+  "hud_back": "Atrás",
+  "hud_help": "Ayuda",
+  "hud_map": "Mapa",
+  "hud_ar": "AR",
+  "hud_collection": "Colección",
+
+  "home_title": "ADARRÓ360",
+  "home_subtitle": "Ventana al pasado",
+  "home_ar": "VER EN AR",
+  "home_explore": "EXPLORAR EL YACIMIENTO",
+  "home_context": "CONTEXTO HISTÓRICO",
+  "home_collection": "COLECCIÓN DE PIEZAS",
+
+  "context_title": "CONTEXTO HISTÓRICO",
+  "context_audio_title": "Escucha la historia narrada",
+  "context_audio_duration": "Duración: 2:00 minutos",
+
+  "context_block1_title": "Un cruce de culturas",
+  "context_block1_text": "El yacimiento de Darró no es solo un punto en el mapa, sino un auténtico libro abierto...",
+
+  "context_block2_title": "La llegada de los íberos (cosetanos)",
+  "context_block2_text": "Hacia el año 550 a.C., la tribu íbera de los cosetanos eligió el cerro de Sant Gervasi...",
+
+  "context_block3_title": "El esplendor romano",
+  "context_block3_text": "Con la llegada de Roma hacia el año 50 a.C., el antiguo poblado íbero fue sustituido por una lujosa villa romana...",
+
+  "context_block4_title": "El yacimiento hoy",
+  "context_block4_text": "Actualmente, el Conjunto Arqueológico de Darró es un espacio patrimonial vivo...",
+
+  "explore_title": "EXPLORAR EL YACIMIENTO",
+  "explore_level": "Principiante",
+  "explore_duration": "~45 min",
+  "explore_start": "Comenzar",
+  "explore_site_title": "Yacimiento de Adarró",
+  "explore_site_desc": "Recorre el yacimiento in situ y activa puntos de interés con la cámara AR.",
+
+  "pieces_title": "COLECCIÓN DE PIEZAS",
+  "pieces_subtitle": "Descubre algunos de los objetos más significativos hallados en Adarró.",
+
+  "piece1_title": "Ánfora íbera",
+  "piece2_title": "Moneda romana",
+  "btn_details": "DETALLES",
+
+  "piece_info_title": "Información de la pieza",
+  "piece_info_function_label": "Función:",
+  "piece_info_function": "Almacenamiento y transporte marítimo de líquidos.",
+  "piece_info_relevance_label": "Relevancia arqueológica:",
+  "piece_info_relevance": "Evidencia del comercio mediterráneo.",
+
+  "ra_viewer_title": "Visor AR",
+
+  "help_title": "AYUDA",
+  "help_how_title": "¿Cómo funciona la aplicación?",
+  "help_how_text": "Esta aplicación te permite explorar piezas arqueológicas en 3D y visualizar una reconstrucción en AR.",
+
+  "help_3d_title": "Explorar el ánfora en 3D",
+  "help_drag": "Arrastra para girar la pieza.",
+  "help_zoom": "Haz zoom con dos dedos o la rueda del ratón.",
+  "help_info": "Toca la “i” para ver información histórica.",
+
+  "help_ar_title": "Ver la villa en AR",
+  "help_ar_step1": "Pulsa el botón “AR” para activar la cámara.",
+  "help_ar_step2": "La villa aparecerá a 2 metros delante de ti.",
+  "help_ar_step3": "Gírate o muévete para observarla.",
+  "help_ar_step4": "Si el dispositivo no soporta AR, se mostrará en 3D.",
+
+  "help_nav_title": "Navegación",
+  "help_nav_home": "Pulsa “Inicio” para volver a la pantalla principal.",
+  "help_nav_explore": "Pulsa “Explorar” para ver las piezas y la villa.",
+  "help_nav_help": "Pulsa “Ayuda” para volver a esta pantalla.",
+
+  "help_compat_title": "Compatibilidad",
+  "help_compat_text": "La AR solo funciona en dispositivos compatibles con WebXR.",
+
+  "nav_home": "INICIO",
+  "nav_ar": "AR",
+  "nav_help": "AYUDA"
+}
