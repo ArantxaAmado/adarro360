@@ -1,6 +1,9 @@
 let currentLang = "ca";
 let i18nStrings = {};
 
+// --------------------------------------------------------------------------
+// CARREGAR IDIOMA
+// --------------------------------------------------------------------------
 async function loadLanguage(lang) {
     try {
         const res = await fetch(`./i18n/${lang}.json`);
@@ -14,6 +17,9 @@ async function loadLanguage(lang) {
     }
 }
 
+// --------------------------------------------------------------------------
+// APLICAR TRADUCCIONS
+// --------------------------------------------------------------------------
 function applyTranslations() {
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
@@ -23,20 +29,31 @@ function applyTranslations() {
     });
 }
 
+// --------------------------------------------------------------------------
+// SELECCIONAR IDIOMA (pantalla inicial)
+// --------------------------------------------------------------------------
+function selectLanguage(lang) {
+    loadLanguage(lang);
+    localStorage.setItem("adarro_lang", lang);
+
+    // Amagar pantalla d'idioma i anar a HOME
+    document.getElementById("screen-language").classList.remove("active");
+    navigateTo("home");
+}
+
+// --------------------------------------------------------------------------
+// INICIALITZACIÓ D'IDIOMA
+// --------------------------------------------------------------------------
 function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
 
     if (saved) {
+        // L’usuari ja va triar idioma → carregar-lo i anar a HOME
         loadLanguage(saved);
+        navigateTo("home");
     } else {
-        const nav = navigator.language || navigator.userLanguage;
-        const lang = nav.startsWith("es")
-            ? "es"
-            : nav.startsWith("en")
-            ? "en"
-            : "ca";
-
-        loadLanguage(lang);
+        // Primera vegada → mostrar pantalla d’idioma
+        navigateTo("screen-language");
     }
 }
 
