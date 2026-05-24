@@ -36,26 +36,30 @@ async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    // FIX: Cambiat 'onboarding' per 'screen-onboarding' que és l'ID real a l'HTML
-    navigateTo("screen-onboarding");
+    // CORREGIT: L'ID real del teu HTML és "onboarding"
+    navigateTo("onboarding");
 }
 
 // --------------------------------------------------------------------------
 // INICIALITZACIÓ D'IDIOMA
-// SEMPRE MOSTRA LA PANTALLA D’IDIOMA PRIMER
 // --------------------------------------------------------------------------
 async function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
 
     if (saved) {
         await loadLanguage(saved);
+    } else {
+        // Fallback si no hi ha idioma guardat: detecta el del navegador
+        const nav = navigator.language || navigator.userLanguage;
+        const lang = nav.startsWith("es") ? "es" : nav.startsWith("en") ? "en" : "ca";
+        await loadLanguage(lang);
     }
 
-    // FIX: Cambiat 'screen-language' per 'language-screen' que és l'ID real a l'HTML
-    navigateTo("language-screen");
+    // CORREGIT: L'ID real del teu HTML és "screen-language"
+    navigateTo("screen-language");
 }
 
-// Exposar perquè app.js la pugui cridar
+// Exposar perquè app.js la pugui cridar globalment
 window.initLanguage = initLanguage;
 window.selectLanguage = selectLanguage;
 window.applyTranslations = applyTranslations;
