@@ -505,6 +505,8 @@ canvas {
   border:0;
 }
 
+
+
 /* ======================================================== */
 /* 10. PANTALLA IDIOMA                                      */
 /* ======================================================== */
@@ -685,6 +687,23 @@ canvas {
   cursor: pointer;
 }
 
+.audio-hud-btn {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    z-index: 9999;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #b36a4c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+
 .screen {
     display: none !important;
 }
@@ -692,6 +711,7 @@ canvas {
 .screen.active {
     display: block !important;
 }
+
 
 
 /* ======================================================== */
