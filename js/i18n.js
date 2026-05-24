@@ -36,7 +36,6 @@ async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    // CORREGIT: L'ID real del teu HTML és "onboarding"
     navigateTo("onboarding");
 }
 
@@ -55,8 +54,9 @@ async function initLanguage() {
         await loadLanguage(lang);
     }
 
-    // CORREGIT: L'ID real del teu HTML és "screen-language"
     navigateTo("screen-language");
+    document.dispatchEvent(new Event("adarro_language_ready"));
+
 }
 
 // Exposar perquè app.js la pugui cridar globalment
