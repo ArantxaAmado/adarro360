@@ -54,9 +54,9 @@
             <h2>Selecciona l'idioma</h2>
 
             <div class="lang-buttons">
-                <button onclick="selectLanguage('ca')">Català</button>
-                <button onclick="selectLanguage('es')">Español</button>
-                <button onclick="selectLanguage('en')">English</button>
+                <button onclick="changeLanguageWithAudio('ca')">Català</button>
+                <button onclick="changeLanguageWithAudio('es')">Español</button>
+                <button onclick="changeLanguageWithAudio('en')">English</button>
             </div>
         </div>
     </div>
@@ -118,59 +118,59 @@
     </div>
 
 
-   <!-- ========================= HOME ========================= -->
-<section id="home" class="screen">
+    <!-- ========================= HOME ========================= -->
+    <section id="home" class="screen">
 
-    <div class="home-header">
-        <h1 class="main-title" data-i18n="home_title"></h1>
-        <p class="subtitle" data-i18n="home_subtitle"></p>
-    </div>
-
-    <div class="launcher-buttons">
-
-        <!-- AR -->
-        <div class="launcher-card" role="button" tabindex="0" id="arLauncher">
-            <span class="launcher-icon">
-                <img src="assets/icon/ar.png" alt="AR">
-            </span>
-            <div class="launcher-text">
-                <h2 data-i18n="home_ar"></h2>
-            </div>
+        <div class="home-header">
+            <h1 class="main-title" data-i18n="home_title"></h1>
+            <p class="subtitle" data-i18n="home_subtitle"></p>
         </div>
 
-        <!-- EXPLORAR -->
-        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
-            <span class="launcher-icon">
-                <img src="assets/icon/explora.png" alt="Explora">
-            </span>
-            <div class="launcher-text">
-                <h2 data-i18n="home_explore"></h2>
+        <div class="launcher-buttons">
+
+            <!-- AR -->
+            <div class="launcher-card" role="button" tabindex="0" id="arLauncher">
+                <span class="launcher-icon">
+                    <img src="assets/icon/ar.png" alt="AR">
+                </span>
+                <div class="launcher-text">
+                    <h2 data-i18n="home_ar"></h2>
+                </div>
             </div>
+
+            <!-- EXPLORAR -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/explora.png" alt="Explora">
+                </span>
+                <div class="launcher-text">
+                    <h2 data-i18n="home_explore"></h2>
+                </div>
+            </div>
+
+            <!-- CONTEXT -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('context')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/context.png" alt="Context">
+                </span>
+                <div class="launcher-text">
+                    <h2 data-i18n="home_context"></h2>
+                </div>
+            </div>
+
+            <!-- PECES -->
+            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('peces')">
+                <span class="launcher-icon">
+                    <img src="assets/icon/peces.png" alt="Peces">
+                </span>
+                <div class="launcher-text">
+                    <h2 data-i18n="home_collection"></h2>
+                </div>
+            </div>
+
         </div>
 
-        <!-- CONTEXT -->
-        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('context')">
-            <span class="launcher-icon">
-                <img src="assets/icon/context.png" alt="Context">
-            </span>
-            <div class="launcher-text">
-                <h2 data-i18n="home_context"></h2>
-            </div>
-        </div>
-
-        <!-- PECES -->
-        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('peces')">
-            <span class="launcher-icon">
-                <img src="assets/icon/peces.png" alt="Peces">
-            </span>
-            <div class="launcher-text">
-                <h2 data-i18n="home_collection"></h2>
-            </div>
-        </div>
-
-    </div>
-
-</section>
+    </section>
 
     <!-- ========================= CONTEXT ========================= -->
     <section id="context" class="screen">
@@ -407,6 +407,10 @@
         </div>
 
     </section>
+    <button id="globalAudioBtn" class="audio-hud-btn" style="display:none" title="Àudio guia">
+        <span class="material-icons">volume_up</span>
+    </button>
+
 
 
     <!-- ========================= NAV BOTTOM ========================= -->
