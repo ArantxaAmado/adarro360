@@ -39,26 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 200);
     }
 
+    // Exposar globalment perquè i18n.js la cridi després de triar idioma
     window.startSplashProgress = startSplashProgress;
 
     // -----------------------------------------------------------
-    // 2. Quan l’idioma està llest → SPLASH
-    // -----------------------------------------------------------
-    document.addEventListener("adarro_language_ready", () => {
-
-        const seenOnboarding = localStorage.getItem("adarro_seen_onboarding");
-
-        if (seenOnboarding) {
-            navigateTo("home");
-            return;
-        }
-
-        navigateTo("splash");
-        startSplashProgress();
-    });
-
-    // -----------------------------------------------------------
-    // 3. BOTÓ "ENTRAR" → ONBOARDING
+    // 2. BOTÓ "ENTRAR" → ONBOARDING
     // -----------------------------------------------------------
     enterBtn?.addEventListener("click", () => {
         clearInterval(splashInterval);
@@ -66,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // -----------------------------------------------------------
-    // 4. PERMISOS DE CÀMERA
+    // 3. PERMISOS DE CÀMERA
     // -----------------------------------------------------------
     requestCameraBtn?.addEventListener("click", async () => {
         try {
@@ -84,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     skipOnboardingBtn?.addEventListener("click", finalitzarOnboarding);
 
     // -----------------------------------------------------------
-    // 5. FINALITZAR ONBOARDING → HOME
+    // 4. FINALITZAR ONBOARDING → HOME
     // -----------------------------------------------------------
     function finalitzarOnboarding() {
         localStorage.setItem("adarro_seen_onboarding", "true");

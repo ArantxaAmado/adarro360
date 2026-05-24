@@ -36,9 +36,6 @@ async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-
-    document.dispatchEvent(new Event("adarro_language_ready"));
-
     navigateTo("splash");
 
     if (window.startSplashProgress) {
@@ -60,16 +57,8 @@ async function initLanguage() {
         return;
     }
 
-    // 2. Si té idioma però no onboarding → SPLASH
-    if (saved && !seenOnboarding) {
-        await loadLanguage(saved);
-        navigateTo("splash");
-        if (window.startSplashProgress) window.startSplashProgress();
-        return;
-    }
-
-    // 3. Primer cop → IDIOMA
-    await loadLanguage("ca");
+    // 2. En qualsevol altre cas → sempre pantalla d'idioma
+    await loadLanguage(saved || "ca");
     navigateTo("screen-language");
 }
 
