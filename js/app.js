@@ -1,5 +1,5 @@
 // ==========================================================================
-// APP.JS 
+// APP.JS – Versió corregida i funcional
 // ==========================================================================
 
 let activeScreen = null;
@@ -15,10 +15,22 @@ let modelLoaded = {
 // --------------------------------------------------------------------------
 function navigateTo(targetId) {
 
-  // Amagar totes les pantalles
+  // ----------------------------------------------------------------------
+  // 🔥 1. DESTRUIR VISOR ANTIC SI VENIM D'UNA PANTALLA 3D
+  // ----------------------------------------------------------------------
+  if (activeScreen === 'anfora' || activeScreen === 'visor') {
+    if (window.disposeVisor3D) window.disposeVisor3D();
+    modelLoaded[activeScreen] = false;
+  }
+
+  // ----------------------------------------------------------------------
+  // 2. AMAGAR TOTES LES PANTALLES
+  // ----------------------------------------------------------------------
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-  // Mostrar la pantalla objectiu
+  // ----------------------------------------------------------------------
+  // 3. MOSTRAR LA PANTALLA OBJECTIU
+  // ----------------------------------------------------------------------
   const target = document.getElementById(targetId);
   if (!target) {
     console.error("Pantalla no trobada:", targetId);
@@ -29,22 +41,35 @@ function navigateTo(targetId) {
   activeScreen = targetId;
   window.activeScreen = targetId;
 
+  // ----------------------------------------------------------------------
+  // 4. TRADUCCIONS
+  // ----------------------------------------------------------------------
   if (window.applyTranslations) applyTranslations();
 
   // ----------------------------------------------------------------------
-  // INICIALITZAR VISOR 3D SI ENTREM A UNA PANTALLA 3D
+  // 5. INICIALITZAR VISOR 3D SI CAL
   // ----------------------------------------------------------------------
   if (targetId === 'anfora' || targetId === 'visor') {
+
     const containerId = targetId === 'anfora' ? 'd-container-piece' : 'd-container-ra';
     const container = document.getElementById(containerId);
 
     waitForContainerSize(container).then(() => {
+
+      // Forçar que el contenidor tingui alçada real
+      container.parentElement.style.height = "100%";
+      container.style.height = "100%";
+
       init3DForScreen(targetId);
 
-      // Forçar un resize un cop el visor ja és visible
+      // 🔥 Resize doble per assegurar layout correcte
       setTimeout(() => {
         if (window.forceVisorResize) window.forceVisorResize(containerId);
-      }, 80);
+      }, 50);
+
+      setTimeout(() => {
+        if (window.forceVisorResize) window.forceVisorResize(containerId);
+      }, 250);
     });
   }
 }
