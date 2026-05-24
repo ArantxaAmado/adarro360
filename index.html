@@ -48,54 +48,54 @@
 
 <body>
 
-   <!-- ========================= PANTALLA IDIOMA ========================= -->
-<div id="screen-language" class="screen active">
-    <div class="lang-box">
-        <h2>Selecciona l'idioma</h2>
+    <!-- ========================= PANTALLA IDIOMA ========================= -->
+    <div id="screen-language" class="screen active">
+        <div class="lang-box">
+            <h2>Selecciona l'idioma</h2>
 
-        <div class="lang-buttons">
-            <button onclick="selectLanguage('ca')">Català</button>
-            <button onclick="selectLanguage('es')">Español</button>
-            <button onclick="selectLanguage('en')">English</button>
+            <div class="lang-buttons">
+                <button onclick="selectLanguage('ca')">Català</button>
+                <button onclick="selectLanguage('es')">Español</button>
+                <button onclick="selectLanguage('en')">English</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- ========================= SPLASH ========================= -->
-<section id="splash" class="screen splash-screen">
-    <div class="splash-inner">
-        <img src="assets/img/logo-adarro360.png" alt="Logotip Adarró 360" class="splash-logo">
+    <!-- ========================= SPLASH ========================= -->
+    <section id="splash" class="screen splash-screen">
+        <div class="splash-inner">
+            <img src="assets/img/logo-adarro360.png" alt="Logotip Adarró 360" class="splash-logo">
 
-        <h1 class="main-title" data-i18n="app_title"></h1>
-        <p class="subtitle" data-i18n="splash_loading"></p>
+            <h1 class="main-title" data-i18n="app_title"></h1>
+            <p class="subtitle" data-i18n="splash_loading"></p>
 
-        <div class="splash-progress">
-            <div class="splash-progress-bar" id="splashProgressBar"></div>
+            <div class="splash-progress">
+                <div class="splash-progress-bar" id="splashProgressBar"></div>
+            </div>
+
+            <button id="enterBtn" class="explore-start-btn" data-i18n="btn_enter"></button>
         </div>
+    </section>
 
-        <button id="enterBtn" class="explore-start-btn" data-i18n="btn_enter"></button>
-    </div>
-</section>
+    <!-- ========================= ONBOARDING ========================= -->
+    <section id="onboarding" class="screen onboarding-screen">
+        <div class="onboarding-inner info-panel-on">
 
-<!-- ========================= ONBOARDING ========================= -->
-<section id="onboarding" class="screen onboarding-screen">
-    <div class="onboarding-inner info-panel-on">
+            <h2 class="section-title" data-i18n="onboarding_title"></h2>
+            <p data-i18n="onboarding_intro"></p>
 
-        <h2 class="section-title" data-i18n="onboarding_title"></h2>
-        <p data-i18n="onboarding_intro"></p>
+            <ol class="onboarding-steps">
+                <li><strong data-i18n="onb_step1_title"></strong> — <span data-i18n="onb_step1_desc"></span></li>
+                <li><strong data-i18n="onb_step2_title"></strong> — <span data-i18n="onb_step2_desc"></span></li>
+                <li><strong data-i18n="onb_step3_title"></strong> — <span data-i18n="onb_step3_desc"></span></li>
+            </ol>
 
-        <ol class="onboarding-steps">
-            <li><strong data-i18n="onb_step1_title"></strong> — <span data-i18n="onb_step1_desc"></span></li>
-            <li><strong data-i18n="onb_step2_title"></strong> — <span data-i18n="onb_step2_desc"></span></li>
-            <li><strong data-i18n="onb_step3_title"></strong> — <span data-i18n="onb_step3_desc"></span></li>
-        </ol>
-
-        <div class="onboarding-actions">
-            <button id="requestCameraBtn" class="details-btn" data-i18n="btn_grant_permissions"></button>
-            <button id="skipOnboardingBtn" class="details-btn" data-i18n="btn_skip"></button>
+            <div class="onboarding-actions">
+                <button id="requestCameraBtn" class="details-btn" data-i18n="btn_grant_permissions"></button>
+                <button id="skipOnboardingBtn" class="details-btn" data-i18n="btn_skip"></button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
     <!-- ========================= HUD (només RA) ========================= -->
@@ -118,60 +118,59 @@
     </div>
 
 
-    <!-- ========================= HOME ========================= -->
-    <section id="home" class="screen">
+   <!-- ========================= HOME ========================= -->
+<section id="home" class="screen">
 
-        <div class="home-header">
-            <h1 class="main-title">ADARRÓ360</h1>
-            <p class="subtitle">Finestra al passat</p>
+    <div class="home-header">
+        <h1 class="main-title" data-i18n="home_title"></h1>
+        <p class="subtitle" data-i18n="home_subtitle"></p>
+    </div>
+
+    <div class="launcher-buttons">
+
+        <!-- AR -->
+        <div class="launcher-card" role="button" tabindex="0" id="arLauncher">
+            <span class="launcher-icon">
+                <img src="assets/icon/ar.png" alt="AR">
+            </span>
+            <div class="launcher-text">
+                <h2 data-i18n="home_ar"></h2>
+            </div>
         </div>
 
-        <div class="launcher-buttons">
-
-            <!-- AR -->
-            <div class="launcher-card" role="button" tabindex="0" id="arLauncher">
-                <span class="launcher-icon">
-                    <img src="assets/icon/ar.png" alt="AR">
-                </span>
-                <div class="launcher-text">
-                    <h2>VEURE EN AR</h2>
-                </div>
+        <!-- EXPLORAR -->
+        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
+            <span class="launcher-icon">
+                <img src="assets/icon/explora.png" alt="Explora">
+            </span>
+            <div class="launcher-text">
+                <h2 data-i18n="home_explore"></h2>
             </div>
-
-
-            <!-- EXPLORAR -->
-            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('explorar')">
-                <span class="launcher-icon">
-                    <img src="assets/icon/explora.png" alt="Explora">
-                </span>
-                <div class="launcher-text">
-                    <h2>EXPLORA EL JACIMENT</h2>
-                </div>
-            </div>
-
-            <!-- CONTEXT -->
-            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('context')">
-                <span class="launcher-icon">
-                    <img src="assets/icon/context.png" alt="Context">
-                </span>
-                <div class="launcher-text">
-                    <h2>CONTEXT HISTÒRIC</h2>
-                </div>
-            </div>
-
-            <!-- PECES -->
-            <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('peces')">
-                <span class="launcher-icon">
-                    <img src="assets/icon/peces.png" alt="Peces">
-                </span>
-                <div class="launcher-text">
-                    <h2>COL·LECCIÓ DE PECES</h2>
-                </div>
-            </div>
-
         </div>
 
-    </section>
+        <!-- CONTEXT -->
+        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('context')">
+            <span class="launcher-icon">
+                <img src="assets/icon/context.png" alt="Context">
+            </span>
+            <div class="launcher-text">
+                <h2 data-i18n="home_context"></h2>
+            </div>
+        </div>
+
+        <!-- PECES -->
+        <div class="launcher-card" role="button" tabindex="0" onclick="navigateTo('peces')">
+            <span class="launcher-icon">
+                <img src="assets/icon/peces.png" alt="Peces">
+            </span>
+            <div class="launcher-text">
+                <h2 data-i18n="home_pieces"></h2>
+            </div>
+        </div>
+
+    </div>
+
+</section>
 
     <!-- ========================= CONTEXT ========================= -->
     <section id="context" class="screen">
