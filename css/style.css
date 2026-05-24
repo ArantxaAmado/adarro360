@@ -508,7 +508,7 @@ canvas {
 /* ======================================================== */
 
 #screen-language {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -538,7 +538,6 @@ canvas {
 }
 
 
-
 /* ======================================================== */
 /* 11. SPLASH                                               */
 /* ======================================================== */
@@ -546,7 +545,7 @@ canvas {
 .splash-screen {
   position: fixed;
   inset: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   background: linear-gradient(180deg, rgba(242,226,196,0.98), rgba(242,226,196,0.95));
@@ -682,6 +681,14 @@ canvas {
   border-radius: 14px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.screen {
+    display: none !important;
+}
+
+.screen.active {
+    display: block !important;
 }
 
 
