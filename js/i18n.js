@@ -36,6 +36,9 @@ async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
+
+    document.dispatchEvent(new Event("adarro_language_ready"));
+
     navigateTo("splash");
 
     if (window.startSplashProgress) {
@@ -68,8 +71,6 @@ async function initLanguage() {
     // 3. Primer cop → IDIOMA
     await loadLanguage("ca");
     navigateTo("screen-language");
-
-    document.dispatchEvent(new Event("adarro_language_ready"));
 }
 
 // Exposar funcions

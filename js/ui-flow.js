@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 200);
     }
 
-    // Exposar globalment
     window.startSplashProgress = startSplashProgress;
 
     // -----------------------------------------------------------

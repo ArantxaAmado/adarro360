@@ -38,9 +38,11 @@ function navigateTo(targetId) {
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
 
-   window.navigateTo = navigateTo;
+  // Exposar navigateTo immediatament
+  window.navigateTo = navigateTo;
 
-    if (window.initLanguage) {
+  // Arrencar el sistema d'idioma
+  if (window.initLanguage) {
     await window.initLanguage();
   }
 });
