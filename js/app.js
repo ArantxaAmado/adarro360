@@ -38,29 +38,9 @@ function navigateTo(targetId) {
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
 
-  // Exposar navigateTo
-  window.navigateTo = navigateTo;
+   window.navigateTo = navigateTo;
 
-  // Esperar que i18n.js estigui carregat
-  if (window.initLanguage) {
+    if (window.initLanguage) {
     await window.initLanguage();
-  }
-
-  // BOTONS ONBOARDING
-  const btnPermisos = document.getElementById("requestCameraBtn");
-  const btnSaltar = document.getElementById("skipOnboardingBtn");
-
-  if (btnPermisos) {
-    btnPermisos.addEventListener("click", () => {
-      localStorage.setItem("adarro_seen_onboarding", "true");
-      navigateTo("home");
-    });
-  }
-
-  if (btnSaltar) {
-    btnSaltar.addEventListener("click", () => {
-      localStorage.setItem("adarro_seen_onboarding", "true");
-      navigateTo("home");
-    });
   }
 });
