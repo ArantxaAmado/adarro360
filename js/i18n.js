@@ -30,13 +30,19 @@ function applyTranslations() {
 }
 
 // --------------------------------------------------------------------------
-// SELECCIONAR IDIOMA → VA A ONBOARDING
+// SELECCIONAR IDIOMA → VA AL SPLASH (PANTALLA DE CÀRREGA)
 // --------------------------------------------------------------------------
 async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    navigateTo("onboarding");
+    // Un cop triat l'idioma, anem a la pantalla de Splash per carregar recursos
+    navigateTo("splash");
+    
+    // Si la funció de la barra de progrés existeix a ui-flow.js, la iniciem
+    if (window.startSplashProgress) {
+        window.startSplashProgress();
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -44,22 +50,30 @@ async function selectLanguage(lang) {
 // --------------------------------------------------------------------------
 async function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
+    const seenOnboarding = localStorage.getItem("adarro_seen_onboarding");
 
-    if (saved) {
+    // 1. Si l'usuari ja ho ha configurat tot anteriorment -> Directe a la HOME
+    if (saved && seenOnboarding) {
         await loadLanguage(saved);
-    } else {
-        // Fallback si no hi ha idioma guardat: detecta el del navegador
-        const nav = navigator.language || navigator.userLanguage;
-        const lang = nav.startsWith("es") ? "es" : nav.startsWith("en") ? "en" : "ca";
-        await loadLanguage(lang);
+        navigateTo("home");
+        return;
     }
 
-    navigateTo("screen-language");
-    document.dispatchEvent(new Event("adarro_language_ready"));
+    // 2. Si té idioma guardat però no ha vist l'onboarding -> Va al Splash directament
+    if (saved && !seenOnboarding) {
+        await loadLanguage(saved);
+        navigateTo("splash");
+        if (window.startSplashProgress) window.startSplashProgress();
+        return;
+    }
 
+    // 3. Primer cop absolut -> Forcem la pantalla de selecció d'idioma
+    // Carreguem català per defecte per evitar textos buits mentre tria
+    await loadLanguage("ca"); 
+    navigateTo("screen-language");
 }
 
-// Exposar perquè app.js la pugui cridar globalment
+// Exposar les funcions globalment
 window.initLanguage = initLanguage;
 window.selectLanguage = selectLanguage;
 window.applyTranslations = applyTranslations;
