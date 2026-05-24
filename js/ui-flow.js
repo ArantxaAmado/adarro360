@@ -4,6 +4,8 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    const splash = document.getElementById("splash");
+    const onboarding = document.getElementById("onboarding");
     const enterBtn = document.getElementById("enterBtn");
     const requestCameraBtn = document.getElementById("requestCameraBtn");
     const skipOnboardingBtn = document.getElementById("skipOnboardingBtn");
@@ -43,7 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
     window.startSplashProgress = startSplashProgress;
 
     // -----------------------------------------------------------
-    // 2. BOTÓ "ENTRAR" → ONBOARDING
+    // 2. DECIDIR QUÈ MOSTRAR EN INICIAR
+    // -----------------------------------------------------------
+    const hasSeenOnboarding = localStorage.getItem("adarro_seen_onboarding");
+
+    if (!hasSeenOnboarding) {
+        // PRIMERA VEGADA → mostrar splash
+        navigateTo("splash");
+        startSplashProgress();
+    } else {
+        // JA HA FET ONBOARDING → anar directament a HOME
+        navigateTo("home");
+    }
+
+    // -----------------------------------------------------------
+    // 3. BOTÓ "ENTRAR" → ONBOARDING
     // -----------------------------------------------------------
     enterBtn?.addEventListener("click", () => {
         clearInterval(splashInterval);
@@ -51,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // -----------------------------------------------------------
-    // 3. PERMISOS DE CÀMERA
+    // 4. PERMISOS DE CÀMERA
     // -----------------------------------------------------------
     requestCameraBtn?.addEventListener("click", async () => {
         try {
@@ -69,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     skipOnboardingBtn?.addEventListener("click", finalitzarOnboarding);
 
     // -----------------------------------------------------------
-    // 4. FINALITZAR ONBOARDING → HOME
+    // 5. FINALITZAR ONBOARDING → HOME
     // -----------------------------------------------------------
     function finalitzarOnboarding() {
         localStorage.setItem("adarro_seen_onboarding", "true");
