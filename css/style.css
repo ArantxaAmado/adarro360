@@ -434,18 +434,18 @@ canvas {
 
 .info-panel {
     position: absolute;
-    bottom: 90px;
+    bottom: 0;
     left: 0;
     right: 0;
     background: rgba(252, 246, 234, 0.651);
     backdrop-filter: blur(6px);
-    padding: 16px 16px 24px 16px;
+    padding: 16px;
     font-size: 0.9rem;
     z-index: 20;
     border-top: 1px solid rgba(0,0,0,0.2);
-    max-height: 45vh; 
-    overflow-y: auto;
 }
+
+
 
 .hidden {
   display: none !important;
