@@ -12,10 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let splashInterval = null;
 
     // -----------------------------------------------------------
-    // 1. FUNCIO DE LA BARRA DE PROGRÈS (La cridarà i18n.js al triar idioma)
+    // 1. BARRA DE PROGRÉS DEL SPLASH
     // -----------------------------------------------------------
     function startSplashProgress() {
         let progress = 0;
+
         if (splashBar) splashBar.style.width = "0%";
         if (enterBtn) {
             enterBtn.disabled = true;
@@ -25,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearInterval(splashInterval);
         splashInterval = setInterval(() => {
             progress = Math.min(100, progress + 10);
+
             if (splashBar) splashBar.style.width = progress + "%";
 
             if (progress >= 100) {
@@ -37,11 +39,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 200);
     }
 
-    // Exposar la funció globalment perquè i18n la pugui activar en el moment precís
+    // Exposar globalment
     window.startSplashProgress = startSplashProgress;
 
     // -----------------------------------------------------------
-    // 2. BOTÓ "ENTRAR" -> VA A ONBOARDING (Instruccions / Permisos)
+    // 2. Quan l’idioma està llest → SPLASH
+    // -----------------------------------------------------------
+    document.addEventListener("adarro_language_ready", () => {
+
+        const seenOnboarding = localStorage.getItem("adarro_seen_onboarding");
+
+        if (seenOnboarding) {
+            navigateTo("home");
+            return;
+        }
+
+        navigateTo("splash");
+        startSplashProgress();
+    });
+
+    // -----------------------------------------------------------
+    // 3. BOTÓ "ENTRAR" → ONBOARDING
     // -----------------------------------------------------------
     enterBtn?.addEventListener("click", () => {
         clearInterval(splashInterval);
@@ -49,27 +67,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // -----------------------------------------------------------
-    // 3. PERMISOS DE CÀMERA
+    // 4. PERMISOS DE CÀMERA
     // -----------------------------------------------------------
     requestCameraBtn?.addEventListener("click", async () => {
         try {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            if (navigator.mediaDevices?.getUserMedia) {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 stream.getTracks().forEach(t => t.stop());
             }
         } catch (err) {
-            console.warn("Permís de càmera denegat o no disponible:", err);
+            console.warn("Permís de càmera denegat:", err);
         }
+
         finalitzarOnboarding();
     });
 
     skipOnboardingBtn?.addEventListener("click", finalitzarOnboarding);
 
     // -----------------------------------------------------------
-    // 4. FINALITZAR ONBOARDING -> ANAR A LA HOME DEFINITIVA
+    // 5. FINALITZAR ONBOARDING → HOME
     // -----------------------------------------------------------
     function finalitzarOnboarding() {
         localStorage.setItem("adarro_seen_onboarding", "true");
         navigateTo("home");
     }
+
 });

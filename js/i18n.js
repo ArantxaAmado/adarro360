@@ -30,16 +30,14 @@ function applyTranslations() {
 }
 
 // --------------------------------------------------------------------------
-// SELECCIONAR IDIOMA → VA AL SPLASH (PANTALLA DE CÀRREGA)
+// SELECCIONAR IDIOMA → VA AL SPLASH
 // --------------------------------------------------------------------------
 async function selectLanguage(lang) {
     await loadLanguage(lang);
     localStorage.setItem("adarro_lang", lang);
 
-    // Un cop triat l'idioma, anem a la pantalla de Splash per carregar recursos
     navigateTo("splash");
-    
-    // Si la funció de la barra de progrés existeix a ui-flow.js, la iniciem
+
     if (window.startSplashProgress) {
         window.startSplashProgress();
     }
@@ -52,14 +50,14 @@ async function initLanguage() {
     const saved = localStorage.getItem("adarro_lang");
     const seenOnboarding = localStorage.getItem("adarro_seen_onboarding");
 
-    // 1. Si l'usuari ja ho ha configurat tot anteriorment -> Directe a la HOME
+    // 1. Si ja està tot fet → HOME
     if (saved && seenOnboarding) {
         await loadLanguage(saved);
         navigateTo("home");
         return;
     }
 
-    // 2. Si té idioma guardat però no ha vist l'onboarding -> Va al Splash directament
+    // 2. Si té idioma però no onboarding → SPLASH
     if (saved && !seenOnboarding) {
         await loadLanguage(saved);
         navigateTo("splash");
@@ -67,13 +65,14 @@ async function initLanguage() {
         return;
     }
 
-    // 3. Primer cop absolut -> Forcem la pantalla de selecció d'idioma
-    // Carreguem català per defecte per evitar textos buits mentre tria
-    await loadLanguage("ca"); 
+    // 3. Primer cop → IDIOMA
+    await loadLanguage("ca");
     navigateTo("screen-language");
+
+    document.dispatchEvent(new Event("adarro_language_ready"));
 }
 
-// Exposar les funcions globalment
+// Exposar funcions
 window.initLanguage = initLanguage;
 window.selectLanguage = selectLanguage;
 window.applyTranslations = applyTranslations;
