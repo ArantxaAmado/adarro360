@@ -11,191 +11,56 @@ let modelLoaded = {
 };
 
 // --------------------------------------------------------------------------
-// CONTROL D'ACCÉS A LA RA
-// --------------------------------------------------------------------------
-function canEnterRA() {
-  return !!localStorage.getItem("adarro_seen_onboarding");
-}
-
-// --------------------------------------------------------------------------
 // NAVEGACIÓ ENTRE PANTALLES
 // --------------------------------------------------------------------------
 function navigateTo(targetId) {
-  console.log("NAVIGATE:", activeScreen, "→", targetId);
 
-  if (activeScreen === targetId) {
-    console.warn("Navegació duplicada bloquejada:", targetId);
-    return;
-  }
-
-  // Destruir visor només si cal
-  if (activeScreen === 'anfora' || activeScreen === 'visor') {
-    if (window.disposeVisor3D) window.disposeVisor3D();
-
-    // RESET DEL MODEL CARREGAT
-    modelLoaded[activeScreen] = false;
-  }
-
-  // Ocultar totes les pantalles
+  // Amagar totes les pantalles
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
 
-  // Mostrar pantalla objectiu (comprovació de seguretat)
-  const targetScreen = document.getElementById(targetId);
-  if (!targetScreen) {
-    console.error("navigateTo: pantalla no trobada:", targetId);
+  // Mostrar la pantalla objectiu
+  const target = document.getElementById(targetId);
+  if (!target) {
+    console.error("Pantalla no trobada:", targetId);
     return;
   }
-  targetScreen.classList.add('active');
 
+  target.classList.add('active');
   activeScreen = targetId;
-  // sincronitzar amb window per a depuració externa
-  window.activeScreen = activeScreen;
+  window.activeScreen = targetId;
 
-  // IMPORTANT: Reaplicar les traduccions quan canviem de pantalla
+  // Reaplicar traduccions
   if (window.applyTranslations) applyTranslations();
-
-  // Inicialitzar visor 3D si cal
-  if (targetId === 'anfora' || targetId === 'visor') {
-    const containerId = targetId === 'anfora' ? 'd-container-piece' : 'd-container-ra';
-    const container = document.getElementById(containerId);
-
-    waitForContainerSize(container).then(() => {
-      init3DForScreen(targetId);
-    });
-  }
-}
-
-// --------------------------------------------------------------------------
-// ESPERAR FINS QUE UN CONTENIDOR TINGUI MIDA REAL
-// --------------------------------------------------------------------------
-function waitForContainerSize(container, timeout = 3000) {
-  return new Promise(resolve => {
-    const start = performance.now();
-
-    function check() {
-      if (!container) {
-        // si no existeix el contenidor, resolem per evitar bloqueig
-        resolve();
-        return;
-      }
-
-      if (container.clientWidth > 0 && container.clientHeight > 0) {
-        resolve();
-      } else if (performance.now() - start > timeout) {
-        console.warn("Timeout esperant mida del contenidor");
-        resolve();
-      } else {
-        requestAnimationFrame(check);
-      }
-    }
-
-    check();
-  });
-}
-
-// --------------------------------------------------------------------------
-// INICIALITZAR VISOR 3D
-// --------------------------------------------------------------------------
-function init3DForScreen(targetId) {
-  if (modelLoaded[targetId]) {
-    console.log("[App] Model ja carregat:", targetId);
-    return;
-  }
-
-  let containerId, modelPath;
-
-  if (targetId === 'anfora') {
-    containerId = 'd-container-piece';
-    modelPath = './assets/models/anfora.glb';
-  }
-
-  if (targetId === 'visor') {
-    containerId = 'd-container-ra';
-    modelPath = './assets/models/villa_darro.glb';
-  }
-
-  console.log("[App] Inicialitzant visor:", containerId);
-  window.initVisor3D?.(containerId, modelPath);
-
-  modelLoaded[targetId] = true;
-}
-
-// --------------------------------------------------------------------------
-// UI
-// --------------------------------------------------------------------------
-function toggleMode() { window.toggleVisorTheme?.(); }
-
-function toggleInfoPanel() {
-  const panel = document.querySelector('#anfora .info-panel');
-  panel?.classList.toggle('hidden');
-}
-
-function resetCamera() { window.resetCamera3D?.(); }
-
-// --------------------------------------------------------------------------
-// AUDIO
-// --------------------------------------------------------------------------
-function toggleAudio() {
-  if (!currentAudio) currentAudio = new Audio('./assets/audio/historia_darro.mp3');
-  const icon = document.querySelector('.play-btn span');
-
-  if (currentAudio.paused) {
-    currentAudio.play();
-    if (icon) icon.textContent = 'pause_circle';
-  } else {
-    currentAudio.pause();
-    if (icon) icon.textContent = 'play_circle';
-  }
-}
-
-// --------------------------------------------------------------------------
-// DESPLEGABLES CONTEXT HISTÒRIC
-// --------------------------------------------------------------------------
-function toggleContext(header) {
-  const block = header.parentElement;
-  block.classList.toggle("active");
 }
 
 // --------------------------------------------------------------------------
 // INICIALITZACIÓ GENERAL
 // --------------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
-  // Exposar funcions globals que altres scripts (i18n) necessiten
+  // Exposar navigateTo
   window.navigateTo = navigateTo;
-  window.toggleMode = toggleMode;
-  window.toggleInfoPanel = toggleInfoPanel;
-  window.resetCamera = resetCamera;
-  window.toggleAudio = toggleAudio;
 
-  // sincronitzar variable global per a depuració
-  window.activeScreen = activeScreen;
-
-  // Cridar initLanguage només si està disponible (i18n.js s'ha de carregar després)
+  // Esperar que i18n.js estigui carregat
   if (window.initLanguage) {
-    try {
-      window.initLanguage();
-    } catch (e) {
-      console.error("Error en initLanguage():", e);
-    }
+    await window.initLanguage();
   }
 
-  // Botó RA de la pantalla EXPLORAR
-  const startARBtn = document.getElementById('startARBtn');
-  if (startARBtn) {
-    startARBtn.addEventListener('click', async () => {
-      navigateTo('visor');
-      await waitForContainerSize(document.getElementById('d-container-ra'));
-      window.startARSession?.();
+  // BOTONS ONBOARDING
+  const btnPermisos = document.getElementById("requestCameraBtn");
+  const btnSaltar = document.getElementById("skipOnboardingBtn");
+
+  if (btnPermisos) {
+    btnPermisos.addEventListener("click", () => {
+      localStorage.setItem("adarro_seen_onboarding", "true");
+      navigateTo("home");
     });
   }
 
-  // Botó RA de la pantalla VISOR
-  const startARBtnVisor = document.getElementById('startARBtnVisor');
-  if (startARBtnVisor) {
-    startARBtnVisor.addEventListener('click', async () => {
-      await waitForContainerSize(document.getElementById('d-container-ra'));
-      window.startARSession?.();
+  if (btnSaltar) {
+    btnSaltar.addEventListener("click", () => {
+      localStorage.setItem("adarro_seen_onboarding", "true");
+      navigateTo("home");
     });
   }
 });
