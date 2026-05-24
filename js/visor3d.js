@@ -291,3 +291,21 @@ window.disposeVisor3D = function () {
   arModel = null;
   isARMode = false;
 };
+
+// ==========================================================================
+// FORÇAR RESIZE DEL VISOR (ANFORA / VISOR)
+// ==========================================================================
+
+window.forceVisorResize = function(containerId) {
+  const container = document.getElementById(containerId || "d-container-piece");
+  if (!container || !renderer || !camera) return;
+
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+
+  if (w > 0 && h > 0) {
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+};

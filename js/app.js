@@ -29,7 +29,6 @@ function navigateTo(targetId) {
   activeScreen = targetId;
   window.activeScreen = targetId;
 
-
   if (window.applyTranslations) applyTranslations();
 
   // ----------------------------------------------------------------------
@@ -41,6 +40,11 @@ function navigateTo(targetId) {
 
     waitForContainerSize(container).then(() => {
       init3DForScreen(targetId);
+
+      // Forçar un resize un cop el visor ja és visible
+      setTimeout(() => {
+        if (window.forceVisorResize) window.forceVisorResize(containerId);
+      }, 80);
     });
   }
 }
@@ -96,10 +100,8 @@ function init3DForScreen(targetId) {
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
 
-  // Exposar navigateTo
   window.navigateTo = navigateTo;
 
-  // Arrencar idioma
   if (window.initLanguage) {
     await window.initLanguage();
   }
@@ -109,17 +111,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 // FUNCIONS NECESSÀRIES PER EVITAR ERRORS AL VISOR 3D
 // --------------------------------------------------------------------------
 
-
 window.toggleInfoPanel = function () {
   const panel = document.querySelector('#anfora .info-panel');
   panel?.classList.toggle('hidden');
 };
 
-
 window.toggleMode = function () {
   window.toggleVisorTheme?.();
 };
-
 
 window.resetCamera = function () {
   window.resetCamera3D?.();
