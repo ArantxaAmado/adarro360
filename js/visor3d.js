@@ -1,5 +1,5 @@
 // ==========================================================================
-// VISOR 3D + RA – VERSIÓ ESTABLE (AR immediata davant de la càmera)
+// VISOR 3D + RA 
 // ==========================================================================
 
 import * as THREE from 'https://cdn.skypack.dev/three@0.128.0/build/three.module.js';
@@ -26,61 +26,89 @@ let isARMode = false;
 // ==========================================================================
 
 window.initVisor3D = function (containerId, modelPath) {
+  console.log(">>> initVisor3D() cridat amb:", containerId, modelPath);
+  console.log(">>> Existeix el contenidor?", !!document.getElementById(containerId));
+  console.log(">>> És explorar3d?", containerId === 'd-container-explorar');
 
-  const container = document.getElementById(containerId);
-  if (!container || !modelPath) {
-    console.warn("[Visor] Falta container o modelPath:", containerId, modelPath);
-    return;
+  try {
+    const container = document.getElementById(containerId);
+    if (!container || !modelPath) {
+      console.warn("[Visor] Falta container o modelPath:", containerId, modelPath);
+      return;
+    }
+
+    let width = container.clientWidth || 300;
+    let height = container.clientHeight || 300;
+    console.log(`[Visor] Mides detectades pel canvas: ${width}px x ${height}px`);
+
+    // Netejo el div per si hi hagués un canvas vell flotant.
+    container.innerHTML = '';
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(isDarkMode ? 0x1a1a1a : 0xeeeeee);
+
+    camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.outputEncoding = THREE.sRGBEncoding;
+
+    container.appendChild(renderer.domElement);
+    console.log("[Visor] Canvas WebGL injectat correctament al contenidor.");
+
+    // MODE 3D EXPLORACIÓ WEB
+    if (containerId === 'd-container-explorar') {
+      console.log(">>> EXCEL·LENT! ENTRO al bloc d'explorar3d");
+      isARMode = false;
+      renderer.xr.enabled = false;
+      scene.background = new THREE.Color(0xeeeeee);
+
+      setupNormalControls();
+      loadModel(modelPath, false);
+      startNormalLoop();
+    }
+
+    // MODE 3D NORMAL (ÀNFORA)
+    if (containerId === 'd-container-piece') {
+      console.log(">>> ENTRO al bloc de l'ànfora");
+      isARMode = false;
+      renderer.xr.enabled = false;
+      scene.background = new THREE.Color(0xeeeeee);
+
+      setupNormalControls();
+      loadModel(modelPath, false);
+      startNormalLoop();
+    }
+
+    // MODE AR
+    if (containerId === 'd-container-ra') {
+      console.log(">>> ENTRO al bloc de Realitat Augmentada");
+      isARMode = true;
+      renderer.xr.enabled = true;
+      scene.background = null;
+
+      setupARSceneLights();
+      loadModel(modelPath, false);
+      startNormalLoop();
+    }
+
+    resizeHandler = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      if (!camera || !renderer || w === 0 || h === 0) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener('resize', resizeHandler);
+    console.log("[Visor] Inicialització de la base acabada sense talls.");
+
+  } catch (errorCrític) {
+    console.error("[Visor] ERROR CRÍTIC DETECTAT DINS D'INITVISOR3D:", errorCrític);
   }
-
-  let width = container.clientWidth || 300;
-  let height = container.clientHeight || 300;
-
-  if (renderer) window.disposeVisor3D();
-
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(isDarkMode ? 0x1a1a1a : 0xeeeeee);
-
-  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
-
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.outputEncoding = THREE.sRGBEncoding;
-
-  container.appendChild(renderer.domElement);
-
-  // MODE 3D NORMAL (ÀNFORA)
-  if (containerId === 'd-container-piece') {
-    isARMode = false;
-    setupNormalControls();
-    loadModel(modelPath, false);
-    startNormalLoop();
-  }
-
-  // MODE AR (JACIMENT)
-  if (containerId === 'd-container-ra') {
-    isARMode = true;
-    renderer.xr.enabled = true;
-    scene.background = null;
-
-    setupARSceneLights();
-
-    // Fallback: si AR no arrenca, almenys es veu en 3D
-    loadModel(modelPath, false);
-    startNormalLoop();
-  }
-
-  resizeHandler = () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    if (!camera || !renderer || w === 0 || h === 0) return;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  };
-  window.addEventListener('resize', resizeHandler);
 };
+
 
 // ==========================================================================
 // MODE 3D NORMAL
@@ -97,6 +125,7 @@ function setupNormalControls() {
 }
 
 function startNormalLoop() {
+  if (animationId) cancelAnimationFrame(animationId);
   function animate() {
     animationId = requestAnimationFrame(animate);
     if (controls) controls.update();
@@ -110,56 +139,113 @@ function startNormalLoop() {
 // ==========================================================================
 
 function loadModel(modelPath, forAR) {
+  console.log("[Visor] >>> loadModel() executant-se. Preparant carregadors...");
   const loader = new GLTFLoader();
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+
+  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
   loader.setDRACOLoader(dracoLoader);
+
+  console.log("[Visor] Llançant petició real de xarxa per:", modelPath);
 
   loader.load(
     modelPath,
     (gltf) => {
+      console.log("[Visor] >>>ÈXIT TOTAL DE CÀRREGA GRÀFICA! Processant escena:", gltf);
       const model = gltf.scene;
 
       model.scale.set(1, 1, 1);
 
+      // REVISIÓ DE MATERIALS: Forço visibilitat amb llum real
+      model.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+
+          const mat = child.material;
+
+          if (Array.isArray(mat)) {
+            mat.forEach(m => fixMaterial(m));
+          } else {
+            fixMaterial(mat);
+          }
+        }
+      });
+
+      function fixMaterial(material) {
+        if (!material) return;
+
+        // Assegura que les textures es vegin correctament
+        if (material.map) {
+          material.map.encoding = THREE.sRGBEncoding;
+        }
+        if (material.emissiveMap) {
+          material.emissiveMap.encoding = THREE.sRGBEncoding;
+        }
+        if (material.roughnessMap) {
+          material.roughnessMap.encoding = THREE.sRGBEncoding;
+        }
+        if (material.metalnessMap) {
+          material.metalnessMap.encoding = THREE.sRGBEncoding;
+        }
+        if (material.normalMap) {
+          material.normalMap.encoding = THREE.LinearEncoding;
+        }
+
+        // Evita materials invisibles
+        material.transparent = false;
+        material.opacity = 1;
+        material.side = THREE.DoubleSide;
+
+        material.needsUpdate = true;
+      }
+
+
       if (forAR) {
         arModel = model;
-
-        // AR immediata: 2 metres davant de la càmera
         arModel.visible = true;
         arModel.position.set(0, 0, -2);
-        arModel.rotation.set(0, 0, 0);
-
         scene.add(arModel);
         return;
       }
 
       scene.add(model);
 
+      // CONFIGURACIÓ DE LLUMS EN VOLTOR (Bany total en 360 graus)
+      // Llum ambient massiva perquè cap racó quedi a fosques
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+      scene.add(ambientLight);
+
+      // Llum zenital (des del cel cap a terra)
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+      hemiLight.position.set(0, 200, 0);
+      scene.add(hemiLight);
+
+      // Llums direccionals creuades per generar relleus i ombres tridimensionals reals
+      const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.0);
+      dirLight1.position.set(100, 150, 50);
+      scene.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+      dirLight2.position.set(-100, 150, -50);
+      scene.add(dirLight2);
+
+      // 1) Mesures i centrat de la vil·la (Ja confirmat que mesura ~47m)
       const box = new THREE.Box3().setFromObject(model);
-      const center = box.getCenter(new THREE.Vector3());
       const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
 
+      console.log(`[Visor] Mides definitives -> X: ${size.x.toFixed(2)}, Y: ${size.y.toFixed(2)}, Z: ${size.z.toFixed(2)}`);
+
+      model.position.x -= center.x;
+      model.position.z -= center.z;
+      model.position.y -= (center.y - size.y / 2); // Deixa la base al punt zero de la pantalla
+
+      // 2) Ajust de la càmera proporcional (Distància ideal per a veure els 47m sencers)
       const maxDim = Math.max(size.x, size.y, size.z);
-      if (maxDim < 0.1) {
-        model.scale.set(10, 10, 10);
-      }
+      const dist = maxDim * 1.8; // Una mica més a prop que abans perquè es vegi més gran des del primer segon
 
-      const box2 = new THREE.Box3().setFromObject(model);
-      const center2 = box2.getCenter(new THREE.Vector3());
-      const size2 = box2.getSize(new THREE.Vector3());
-      const maxDim2 = Math.max(size2.x, size2.y, size2.z);
-
-      model.position.sub(center2);
-
-      const camDistFactor = modelPath.includes('villa') ? 2.5 : 1.5;
-
-      camera.position.set(
-        maxDim2 * camDistFactor,
-        maxDim2 * 1.2,
-        maxDim2 * camDistFactor
-      );
-
+      camera.position.set(dist, dist * 0.7, dist);
       camera.lookAt(0, 0, 0);
 
       initialCameraPosition = camera.position.clone();
@@ -169,13 +255,21 @@ function loadModel(modelPath, forAR) {
         controls.target.set(0, 0, 0);
         controls.update();
       }
+
+      console.log("[Visor] Procés finalitzat. Model llest i il·luminat.");
     },
-    undefined,
+    (xhr) => {
+      if (xhr.total) {
+        const percent = Math.round((xhr.loaded / xhr.total) * 100);
+        console.log(`[Visor] Descarregant binari .glb: ${percent}%`);
+      }
+    },
     (error) => {
-      console.error("[Visor] Error carregant GLB:", error);
+      console.error("[Visor] Error carregant GLB des de la xarxa:", error);
     }
   );
 }
+
 
 // ==========================================================================
 // MODE AR – CONFIGURACIÓ

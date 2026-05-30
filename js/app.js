@@ -1,5 +1,5 @@
 // ==========================================================================
-// APP.JS 
+// APP.JS – ADARRÓ 360 (CORE DE NAVEGACIÓ I CONTROL AUDIO/3D)
 // ==========================================================================
 
 let activeScreen = null;
@@ -8,7 +8,8 @@ let audioLang = 'ca';
 
 let modelLoaded = {
   anfora: false,
-  visor: false
+  visor: false,
+  explorar3d: false 
 };
 
 // --------------------------------------------------------------------------
@@ -16,8 +17,8 @@ let modelLoaded = {
 // --------------------------------------------------------------------------
 function navigateTo(targetId) {
 
-  // 1. Destruir visor antic si venim d'una pantalla 3D
-  if (activeScreen === 'anfora' || activeScreen === 'visor') {
+  // 1. Destruir visor antic si venim d'una pantalla 3D (S'inclou explorar3d)
+  if (activeScreen === 'anfora' || activeScreen === 'visor' || activeScreen === 'explorar3d') {
     if (window.disposeVisor3D) window.disposeVisor3D();
     modelLoaded[activeScreen] = false;
   }
@@ -41,37 +42,53 @@ function navigateTo(targetId) {
     window.applyTranslations();
   }
 
-  // 5. Inicialitzar visor 3D si cal
-  if (targetId === 'anfora' || targetId === 'visor') {
-    const containerId = targetId === 'anfora' ? 'd-container-piece' : 'd-container-ra';
+  // 5. Inicialitzar visor 3D si cal (S'inclou la condició per a explorar3d)
+  if (targetId === 'anfora' || targetId === 'visor' || targetId === 'explorar3d') {
+    const containerId = targetId === 'anfora' ? 'd-container-piece' : 
+                        (targetId === 'visor' ? 'd-container-ra' : 'd-container-explorar');
     const container = document.getElementById(containerId);
 
-    waitForContainerSize(container).then(() => {
-      container.parentElement.style.height = "100%";
-      container.style.height = "100%";
-
-      init3DForScreen(targetId);
-
+    if (container) {
+      // 1) Dono temps perquè la pantalla passi de display:none → flex
       setTimeout(() => {
-        if (window.forceVisorResize) window.forceVisorResize(containerId);
-      }, 50);
 
-      setTimeout(() => {
-        if (window.forceVisorResize) window.forceVisorResize(containerId);
-      }, 250);
-    });
+        // 2) Ara espero que el contenidor tingui mida real (> 0px)
+        waitForContainerSize(container).then(() => {
+
+          // 3) Es dona un últim tick perquè el layout s’estabilitzi del tot
+          setTimeout(() => {
+
+            if (container.parentElement) container.parentElement.style.height = "100%";
+            container.style.height = "100%";
+
+            // Inicialitzoçació del Three.js amb mides reals garantides
+            init3DForScreen(targetId);
+
+            // Forço el recalculat de mida de la càmera per si de cas
+            setTimeout(() => {
+              if (window.forceVisorResize) window.forceVisorResize(containerId);
+            }, 50);
+
+            setTimeout(() => {
+              if (window.forceVisorResize) window.forceVisorResize(containerId);
+            }, 250);
+
+          }, 50); // El delay clau de seguretat per al layout
+
+        });
+
+      }, 100);
+    }
   }
-
+  
   // ----------------------------------------------------------------------
-  // 6. CONTROL GLOBAL D'AUDIO (Apareix on toca, amagat a la HOME)
+  // 6. CONTROL GLOBAL D'AUDIO
   // ----------------------------------------------------------------------
   const audioBtn = document.getElementById('globalAudioBtn');
-  const audioScreens = ['context', 'visor', 'explorar'];
+  const audioScreens = ['context', 'visor', 'explorar3d']; // Netejat de rutes inexistents
 
-  // Si sortim de les pantalles d'àudio, s'atura el so per evitar superposicions
   if (!audioScreens.includes(targetId) && currentAudio && !currentAudio.paused) {
     currentAudio.pause();
-    // Restablir les icones dels reproductors de la pàgina a mode 'Play'
     const contextIcon = document.querySelector('.play-btn .material-symbols-outlined');
     if (contextIcon) contextIcon.textContent = 'play_circle';
   }
@@ -81,7 +98,6 @@ function navigateTo(targetId) {
       audioBtn.style.display = 'none';
     } else if (audioScreens.includes(targetId)) {
       audioBtn.style.display = 'flex';
-      // Sincronitzem la icona del botó flotant segons si realment està sonant o no
       const globalIcon = audioBtn.querySelector('.material-icons');
       if (globalIcon) {
         globalIcon.textContent = (currentAudio && !currentAudio.paused) ? 'volume_up' : 'volume_off';
@@ -110,9 +126,7 @@ function waitForContainerSize(container, timeout = 3000) {
       } else {
         requestAnimationFrame(check);
       }
-    }
-
-    check();
+    } check();
   });
 }
 
@@ -134,18 +148,23 @@ function init3DForScreen(targetId) {
     modelPath = 'assets/models/villa_darro.glb';
   }
 
-  console.log("[App] Inicialitzant visor:", containerId);
-  window.initVisor3D(containerId, modelPath);
+  if (targetId === 'explorar3d') {
+    containerId = 'd-container-explorar';
+    modelPath = 'assets/models/villa_darro.glb';
+  }
 
-  modelLoaded[targetId] = true;
+  console.log("[App] Inicialitzant visor a:", containerId);
+  window.initVisor3D(containerId, modelPath);
+  modelLoaded[targetId] = true; 
 }
 
 // --------------------------------------------------------------------------
-// INICIALITZACIÓ GENERAL
+// INICIALITZACIÓ GENERAL EN ENGEGAR EL DOM
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
   window.navigateTo = navigateTo;
 
+  // Es Delega la inicialització d'idiomes al script i18n.js de forma asíncrona
   if (window.initLanguage) {
     await window.initLanguage();
   }
@@ -153,6 +172,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const audioBtn = document.getElementById('globalAudioBtn');
   if (audioBtn) {
     audioBtn.addEventListener('click', toggleAudio);
+  }
+
+  const startARBtn = document.getElementById('startARBtn');
+  if (startARBtn) {
+    startARBtn.addEventListener('click', () => {
+      console.log("[UI] Botó Començar premut");
+      if (window.startARSession) {
+        window.startARSession();
+      } else {
+        console.warn("Funció startARSession no disponible.");
+      }
+    });
   }
 });
 
@@ -173,12 +204,12 @@ window.resetCamera = function () {
 };
 
 // --------------------------------------------------------------------------
-// AUDIO: DETECTAR FITXER SEGONS LA VARIABLE BLINDADA
+// AUDIO: DETECTAR FITXER SEGONS LA VARIABLE UNIFICADA
 // --------------------------------------------------------------------------
 function getAudioFileForLanguage() {
-  let lang = audioLang || localStorage.getItem('selectedLanguage') || 'ca';
+  // Sincronització amb la clau 'adarro_lang' de i18n.js
+  let lang = localStorage.getItem('adarro_lang') || 'ca';
 
-  // Normalitzar possibles valors derivats de llibreries (ex: 'es-ES', 'ca_ES')
   lang = lang.toLowerCase();
   if (lang.startsWith('ca')) lang = 'ca';
   else if (lang.startsWith('es')) lang = 'es';
@@ -193,7 +224,8 @@ function getAudioFileForLanguage() {
       file = 'assets/audio/historia_darro_en.mp3';
       break;
     default:
-      file = 'assets/audio/historia_darro_cat.mp3';
+      // Fitxer natiu precatxat al sw.js per al mode offline
+      file = 'assets/audio/historia_darro.mp3';
       break;
   }
 
@@ -205,7 +237,6 @@ function getAudioFileForLanguage() {
 // CONTROL REPRODUCTOR / PAUSA
 // --------------------------------------------------------------------------
 function toggleAudio() {
-  // Si no s'ha creat l'àudio (o s'ha tancat per canvi de llengua), es genera al moment exacte del Play
   if (!currentAudio) {
     const audioFile = getAudioFileForLanguage();
     console.log(">>> [Audio] Creant instància real en memòria amb l'arxiu:", audioFile);
@@ -218,75 +249,15 @@ function toggleAudio() {
 
   if (currentAudio.paused) {
     currentAudio.play();
-    // Icones quan SONA: Volum activat i botó en estat "Pausa"
     if (globalIcon) globalIcon.textContent = 'volume_up';
     if (contextIcon) contextIcon.textContent = 'pause_circle';
   } else {
     currentAudio.pause();
-    // Icones quan es PAUSA: Volum silenciat i botó en estat "Play"
     if (globalIcon) globalIcon.textContent = 'volume_off';
     if (contextIcon) contextIcon.textContent = 'play_circle';
   }
 }
 window.toggleAudio = toggleAudio;
-
-// --------------------------------------------------------------------------
-// SINCRO GLOBAL: S'EXECUTA EN CLICAR ELS BOTONS D'IDIOMA DE L'HTML
-// --------------------------------------------------------------------------
-window.changeLanguageWithAudio = async function(lang) {
-  console.log(">>> [Idioma] Sol·licitat canvi a:", lang);
-
-  // 1. Aturar i eliminar completament l'àudio vell actiu per deixar pas al nou
-  if (currentAudio) {
-    console.log(">>> [Audio] Aturant i alliberant l'àudio antic.");
-    currentAudio.pause();
-    currentAudio = null; 
-  }
-
-  // 2. Assignar de forma fulminant el nou idioma a la variable de control de veu i al magatzem
-  audioLang = lang;
-  localStorage.setItem('selectedLanguage', lang);
-
-  // 3. Llançar ordres de traducció per als textos de les pantalles
-  if (window.setLanguage) {
-    await window.setLanguage(lang);
-  }
-  
-  if (window.applyTranslations) {
-    await window.applyTranslations();
-  }
-
-  // 4. Resetar les icones a l'estat original de repòs (Play)
-  const globalIcon = document.querySelector('#globalAudioBtn .material-icons');
-  const contextIcon = document.querySelector('.play-btn .material-symbols-outlined');
-  if (globalIcon) globalIcon.textContent = 'volume_off';
-  if (contextIcon) contextIcon.textContent = 'play_circle';
-
-  // 5. Retornar directament a la Home (elegant i neta)
-  navigateTo('home');
-};
-
-// --------------------------------------------------------------------------
-// INICIALITZAR IDIOMA EN ARRENCAR O RECARREGAR L'APLICACIÓ
-// --------------------------------------------------------------------------
-window.initLanguage = async function() {
-  const lang = localStorage.getItem('selectedLanguage') || 'ca';
-  localStorage.setItem('selectedLanguage', lang);
-  
-  // Sincronitzar la variable de veu en encendre l'aplicació
-  audioLang = lang;
-
-  if (window.applyTranslations) {
-    await window.applyTranslations();
-  }
-
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio = null;
-  }
-
-  console.log(">>> [Init] Idioma inicial assignat a: " + audioLang + ". L'àudio naixerà orfe fins que es premi Play.");
-};
 
 // --------------------------------------------------------------------------
 // DESPLEGABLES CONTEXT HISTÒRIC

@@ -1,37 +1,53 @@
+// ==========================================================================
+// AR-IOS.JS – ADARRÓ 360
+// Mode AR per a iOS (Safari) utilitzant Apple Quick Look (.usdz)
+// ==========================================================================
+console.log("[AR] ar-ios.js carregat correctament");
+
 /* ============================================================
-   AR-IOS.JS
-   Mode AR per a iOS (Safari) utilitzant Quick Look (.usdz)
+   MODEL ÚNIC DE LA VILA ROMANA (Format Apple USDZ comprimit)
    ============================================================ */
-
-console.log("[AR] ar-ios.js carregat");
-
-/* ============================================================
-   MODEL ÚNIC DE LA VILA (format USDZ)
-   ============================================================ */
-
-const USDZ_MODEL_PATH = "assets/models/villa_darro.usdz";
+// S'afegeix '#allowsContentScaling=0' per evitar que l'usuari pugui deformar
+// o encongir l'escala real (1:1) de la vila romana durant la visita al jaciment.
+const USDZ_MODEL_PATH = "assets/models/villa_darro.usdz#allowsContentScaling=0";
 
 /* ============================================================
    Funció global cridada des de ar-detect.js
    ============================================================ */
 window.ARQuickLook = function () {
-    console.log("[AR] Obrint AR Quick Look a iOS");
+    console.log("[AR] Preparant activació d'Apple AR Quick Look a iOS...");
 
-    // Crear un enllaç temporal <a> amb rel="ar"
+    // 1. Crear l'enllaç temporal <a> requerit per Apple amb la relació "ar"
     const link = document.createElement("a");
     link.setAttribute("rel", "ar");
     link.setAttribute("href", USDZ_MODEL_PATH);
 
-    // Quick Look requereix una imatge dins l'enllaç
+    // 2. Requisit de Quick Look: Necessita contenir un element gràfic (imatge o text)
+    // a dins de l'enllaç per validar el destí gràfic 3D de l'hipervincle.
     const img = document.createElement("img");
-    img.setAttribute("src", "assets/icon/ar.png");
-    img.setAttribute("alt", "AR");
+    img.setAttribute("src", "assets/icon/ar.png"); // Icona neta del visor
+    img.setAttribute("alt", "Activar Realitat Augmentada");
     img.style.width = "1px";   
     img.style.height = "1px";
+    img.style.opacity = "0"; // Invisible però present al DOM per seguretat visual
     link.appendChild(img);
 
-    // Afegir, clicar i eliminar
+    // 3. Inserció efímera al document body
     document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    // 4. Execució del clic. Al provenir immediatament de la interacció del botó
+    // de la interfície, Safari accepta l'acció de l'usuari i obre el visor natiu.
+    try {
+        link.click();
+        console.log("[AR] Enllaç Quick Look executat correctament.");
+    } catch (err) {
+        console.error("[AR] Error crític llançant el Quick Look natiu:", err);
+    }
+
+    // 5. Neteja immediata del node per evitar duplicats residuals al DOM
+    setTimeout(() => {
+        if (link.parentNode) {
+            document.body.removeChild(link);
+        }
+    }, 100);
 };
