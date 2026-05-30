@@ -358,7 +358,7 @@ p, ul{
   padding: 16px;
   display: flex;
   gap: 15px;
-  margin-top: 100px;
+  margin-top: 400px;
   z-index: 10;
 }
 
@@ -445,8 +445,6 @@ canvas {
     border-top: 1px solid rgba(0,0,0,0.2);
 }
 
-
-
 .hidden {
   display: none !important;
 }
@@ -506,6 +504,39 @@ canvas {
 }
 
 
+   /* ESTILS EXCLUSIUS PANTALLA EXPLORACIÓ 3D */
+
+/* 1. La pantalla quan està amagada */
+#explorar3d.screen {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* 2. Superem qualsevol display:none del CSS general quan la pantalla s'activa */
+#explorar3d.screen.active {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* 3. El contenidor ocuparà tot l'espai restant restant la capçalera */
+#d-container-explorar {
+    flex: 1 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 400px; /* Alçada mínima de seguretat */
+    position: relative;
+    background-color: #eeeeee; /* Fons clar neutre per veure bé el 3D */
+    display: block !important;
+}
+
+/* Evitem que qualsevol element canvas de Three.js es col·lapsi a 0px */
+#d-container-explorar canvas {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
 
 /* ======================================================== */
 /* 10. PANTALLA IDIOMA                                      */
