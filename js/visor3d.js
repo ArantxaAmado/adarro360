@@ -213,20 +213,20 @@ function loadModel(modelPath, forAR) {
 
       // CONFIGURACIÓ DE LLUMS EN VOLTOR (Bany total en 360 graus)
       // Llum ambient massiva perquè cap racó quedi a fosques
-      const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
       scene.add(ambientLight);
 
       // Llum zenital (des del cel cap a terra)
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.3);
       hemiLight.position.set(0, 200, 0);
       scene.add(hemiLight);
 
       // Llums direccionals creuades per generar relleus i ombres tridimensionals reals
-      const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.0);
+      const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.3);
       dirLight1.position.set(100, 150, 50);
       scene.add(dirLight1);
 
-      const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+      const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.2);
       dirLight2.position.set(-100, 150, -50);
       scene.add(dirLight2);
 
